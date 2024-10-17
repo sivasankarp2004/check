@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile Page with 3D Colors</title>
+  <style>
+    /* General mobile-first styling */
+    body {
+      font-family: "Times New Roman", Times, serif;
+      background-color: #cecece;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Profile card styling */
+    .profile-card {
+      background: linear-gradient(145deg, #1ba0d0, #1ba0d0);
+      padding: 20px;
+      text-align: center;
+      border-radius: 12px;
+      margin: 20px auto;
+      max-width: 90%;
+      box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), -4px -4px 8px rgba(255, 255, 255, 0.2);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .profile-card img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-color: #d3d3d3;
+      display: block;
+      margin: 0 auto 10px;
+      box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.2), inset -4px -4px 8px rgba(255, 255, 255, 0.4);
+    }
+
+    .profile-card h1 {
+      margin: 0;
+      font-size: 24px;
+      color: #333;
+    }
+
+    .profile-card p {
+      margin: 5px 0;
+      color: #555;
+      font-size: 14px;
+    }
+
+    /* Delete button styling */
+    .delete-btn {
+      background-color: #d01212; /* Red color */
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 15px;
+      transition: background-color 0.3s ease;
+      box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2), -4px -4px 8px rgba(255, 255, 255, 0.2);
+    }
+
+    .delete-btn:hover {
+      background-color: #740707; /* Darker red on hover */
+    }
+
+    /* Course list container */
+    .course-list {
+      background-color: #c6a2c1;
+      border-radius: 12px;
+      margin: 30px auto;
+      max-width: 90%;
+      padding: 30px;
+      box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), -4px -4px 8px rgba(255, 255, 255, 0.2);
+    }
+
+    /* Individual course item styling */
+    .course {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid #eee;
+      opacity: 0;
+      animation: fadeIn 1s ease-in-out forwards;
+    }
+
+    .course:nth-child(odd) {
+      animation-delay: 0.1s;
+    }
+
+    .course:nth-child(even) {
+      animation-delay: 0.2s;
+    }
+
+    .course:last-child {
+      border-bottom: none;
+    }
+
+    /* Course icon with 3D effect */
+    .course-icon {
+      width: 30px;
+      height: 30px;
+     
+      
+    }
+
+    .course-title {
+      flex-grow: 1;
+      color: #333;
+      margin-right: 10px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    /* 3D button effect */
+    .edit-btn {
+      background: linear-gradient(145deg, #1221f9, #2533ff);
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2), -4px -4px 8px rgba(255, 255, 255, 0.2);
+      animation: fadeIn 1s ease-in-out forwards;
+    }
+
+    .edit-btn:hover {
+      background: linear-gradient(145deg, #39a1e6, #4ae4ff);
+      transform: translateY(-2px);
+      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2), -2px -2px 4px rgba(255, 255, 255, 0.2);
+    }
+
+    /* Input fields 3D focus */
+    .course-title input {
+      width: 90%;
+      padding: 8px;
+      font-size: 14px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1), inset -2px -2px 5px rgba(255, 255, 255, 0.5);
+    }
+
+    .course-title input:focus {
+      border-color: #ffc94a;
+      outline: none;
+      box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2), -4px -4px 8px rgba(255, 255, 255, 0.5);
+    }
+
+    /* Fade-in animation */
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Add media query for larger screens */
+    @media (min-width: 768px) {
+      .profile-card {
+        max-width: 500px;
+      }
+
+      .course-list {
+        max-width: 500px;
+      }
+
+      .course-title {
+        font-size: 18px;
+      }
+
+      .edit-btn {
+        font-size: 16px;
+      }
+    }
+    h5 {
+    font-size: 14px; /* Font size */
+    font-weight: 600; /* Font weight */
+    line-height: 1.5; /* Line height */
+    color: #cb0404; /* Text color */
+    margin: 9; /* Remove default margin */
+    padding:10px; /* Add padding for spacing */
+    text-align: center; /* Align text to the left */
+    font-family: 'time new roman', sans-serif; /* Change font family */
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- Profile Card -->
+  <div class="profile-card">
+    <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSUQMCwXg0ZYw9z3YypnUoPOxEhGvE23h6n_PAA-6ghUtinK1bnGGfGFA6jTG0yFvN5STMGbedabo9ugTnEX_qAoqDNWyQuyyE2OtBD9os" alt="Profile Picture" id="profile">
+    <h1 id="headingName">Siva Sankar</h1>
+    <p id="headingReg">22it056</p>
+    <button class="delete-btn" onclick="Remove()">Delete Profile</button> <!-- Delete button -->
+  </div>
+
+  <!-- Course List -->
+  <div class="course-list">
+    <div class="course">
+        <img class="course-icon" src="https://cdn-icons-png.flaticon.com/128/8234/8234492.png" alt="Course Icon">
+        <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NAME:</h5>
+        <div class="course-title" id="course1">Siva Sankar</div>
+        <button class="edit-btn" id="btn1" onclick="toggleEdit('course1', 'btn1', 'name')">Edit</button>
+    </div>
+
+    <div class="course">
+        <img class="course-icon" src="https://cdn-icons-png.flaticon.com/128/2522/2522987.png" alt="Course Icon">
+        <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REGISTER NO:</h5>
+        <div class="course-title" id="course2">221it056</div>
+        <button class="edit-btn" id="btn2" onclick="toggleEdit('course2', 'btn2', 'regNo')">Edit</button>
+    </div>
+
+    <div class="course">
+        <img class="course-icon" src="https://cdn-icons-png.flaticon.com/128/3663/3663891.png" alt="Course Icon">
+        <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COURSE YEAR:</h5>
+        <div class="course-title" id="course3">3rd year</div>
+        <button class="edit-btn" id="btn3" onclick="toggleEdit('course3', 'btn3', 'courseYear')">Edit</button>
+    </div>
+
+    <div class="course">
+        <img class="course-icon" src="https://cdn-icons-png.flaticon.com/128/15886/15886631.png" alt="Course Icon">
+        <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EDUCATION TYPE:</h5>
+        <div class="course-title" id="course4">Bachelor's</div>
+        <button class="edit-btn" id="btn4" onclick="toggleEdit('course4', 'btn4', 'educationType')">Edit</button>
+    </div>
+
+    <div class="course">
+        <img class="course-icon" src="https://cdn-icons-png.flaticon.com/128/1038/1038746.png" alt="Course Icon">
+        <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DATE OF BIRTH:</h5>
+        <div class="course-title" id="course5">15/12/2004</div>
+        <button class="edit-btn" id="btn5" onclick="toggleEdit('course5', 'btn5', 'dob')">Edit</button>
+    </div>
+
+    <div class="course">
+        <img class="course-icon" src="https://cdn-icons-png.flaticon.com/128/3103/3103907.png" alt="Course Icon">
+        <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GENDER:</h5>
+        <div class="course-title" id="course6">Male</div>
+        <button class="edit-btn" id="btn6" onclick="toggleEdit('course6', 'btn6', 'gender')">Edit</button>
+    </div>
+
+    <div class="course">
+        <img class="course-icon" src="https://cdn-icons-png.flaticon.com/128/8743/8743967.png" alt="Course Icon">
+        <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PHONE NUMBER:</h5>
+        <div class="course-title" id="course7">9025528322</div>
+        <button class="edit-btn" id="btn7" onclick="toggleEdit('course7', 'btn7', 'studentPhone')">Edit</button>
+    </div>
+
+    <div class="course">
+        <img class="course-icon" src="https://cdn-icons-png.flaticon.com/128/6917/6917136.png" alt="Course Icon">
+        <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EMAIL:</h5>
+        <div class="course-title" id="course8">221it056@kongunaducollege.ac.in</div>
+        <button class="edit-btn" id="btn8" onclick="toggleEdit('course8', 'btn8', 'studentEmail')">Edit</button>
+    </div>
+
+    <div class="course">
+        <img class="course-icon" src="https://cdn-icons-png.flaticon.com/128/5099/5099701.png" alt="Course Icon">
+        <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ROOM NO:</h5>
+        <div class="course-title" id="course9">212</div>
+        <button class="edit-btn" id="btn9" onclick="toggleEdit('course9', 'btn9', 'roomNo')">Edit</button>
+    </div>
+
+    <div class="course">
+        <img class="course-icon" src="https://cdn-icons-png.flaticon.com/128/16489/16489740.png" alt="Course Icon">
+        <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NATIVE PLACE:</h5>
+        <div class="course-title" id="course10">Palani</div>
+        <button class="edit-btn" id="btn10" onclick="toggleEdit('course10', 'btn10', 'nativePlace')">Edit</button>
+    </div>
+
+    <div class="course">
+        <img class="course-icon" src="https://cdn-icons-png.flaticon.com/128/8910/8910248.png" alt="Course Icon">
+        <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ADDRESS:</h5>
+        <div class="course-title" id="course11">V.P.Pudhur Kavalapatti Post Palani Pincode (624621)</div>
+        <button class="edit-btn" id="btn11" onclick="toggleEdit('course11', 'btn11', 'address')">Edit</button>
+    </div>
+
+    <div class="course">
+        <img class="course-icon" src="https://cdn-icons-png.flaticon.com/128/4941/4941674.png" alt="Course Icon">
+        <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RELIGION:</h5>
+        <div class="course-title" id="course12">Hindu</div>
+        <button class="edit-btn" id="btn12" onclick="toggleEdit('course12', 'btn12', 'religion')">Edit</button>
+    </div>
+
+    <div class="course">
+        <img class="course-icon" src="https://cdn-icons-png.flaticon.com/128/4319/4319041.png" alt="Course Icon">
+        <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CASTE:</h5>
+        <div class="course-title" id="course13">BC</div>
+        <button class="edit-btn" id="btn13" onclick="toggleEdit('course13', 'btn13', 'caste')">Edit</button>
+    </div>
+
+    <div class="course">
+        <img class="course-icon" src="https://cdn-icons-png.flaticon.com/128/6203/6203325.png" alt="Course Icon">
+        <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NATIONALITY:</h5>
+        <div class="course-title" id="course14">India</div>
+        <button class="edit-btn" id="btn14" onclick="toggleEdit('course14', 'btn14', 'nationality')">Edit</button>
+    </div>
+
+    <div class="course">
+        <img class="course-icon" src="https://cdn-icons-png.flaticon.com/128/7715/7715549.png" alt="Course Icon">
+        <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BLOOD GROUP:</h5>
+        <div class="course-title" id="course15">B+</div>
+        <button class="edit-btn" id="btn15" onclick="toggleEdit('course15', 'btn15', 'bloodgroup')">Edit</button>
+    </div>
+
+    <div class="course">
+        <img class="course-icon" src="https://cdn-icons-png.flaticon.com/128/4392/4392194.png" alt="Course Icon">
+        <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOTHER NAME:</h5>
+        <div class="course-title" id="course16">Sevanthi</div>
+        <button class="edit-btn" id="btn16" onclick="toggleEdit('course16', 'btn16', 'motherName')">Edit</button>
+    </div>
+
+    <div class="course">
+        <img class="course-icon" src="https://cdn-icons-png.flaticon.com/128/4032/4032085.png" alt="Course Icon">
+        <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FATHER NAME:</h5>
+        <div class="course-title" id="course17">Sundar</div>
+        <button class="edit-btn" id="btn17" onclick="toggleEdit('course17', 'btn17', 'fatherName')">Edit</button>
+    </div>
+
+    <div class="course">
+        <img class="course-icon" src="https://cdn-icons-png.flaticon.com/128/9304/9304697.png" alt="Course Icon">
+        <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PARENT'S PHONE NUMBER:</h5>
+        <div class="course-title" id="course18">9025528322</div>
+        <button class="edit-btn" id="btn18" onclick="toggleEdit('course18', 'btn18', 'parentsno')">Edit</button>
+    </div>
+
+    <div class="course">
+        <img class="course-icon" src="https://cdn-icons-png.flaticon.com/128/4328/4328410.png" alt="Course Icon">
+        <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ACCOUNT NUMBER:</h5>
+        <div class="course-title" id="course19">123456789012</div>
+        <button class="edit-btn" id="btn19" onclick="toggleEdit('course19', 'btn19', 'accountNo')">Edit</button>
+    </div>
+
+    <div class="course">
+        <img class="course-icon" src="https://cdn-icons-png.flaticon.com/128/8828/8828777.png" alt="Course Icon">
+        <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ACCOUNT HOLDER NAME:</h5>
+        <div class="course-title" id="course20">Siva Sankar</div>
+        <button class="edit-btn" id="btn20" onclick="toggleEdit('course20', 'btn20', 'accountHolder')">Edit</button>
+    </div>
+
+    <div class="course">
+        <img class="course-icon" src="https://cdn-icons-png.flaticon.com/128/6067/6067397.png" alt="Course Icon">
+        <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IFSC CODE:</h5>
+        <div class="course-title" id="course21">SBI001</div>
+        <button class="edit-btn" id="btn21" onclick="toggleEdit('course21', 'btn21', 'ifsc')">Edit</button>
+    </div>
+
+    <div class="course">
+        <img class="course-icon" src="https://cdn-icons-png.flaticon.com/128/6265/6265705.png" alt="Course Icon">
+        <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BRANCH:</h5>
+        <div class="course-title" id="course22">Palani</div>
+        <button class="edit-btn" id="btn22" onclick="toggleEdit('course22', 'btn22', 'branch')">Edit</button>
+    </div>
+
+    <div class="course">
+        <img class="course-icon" src="https://cdn-icons-png.flaticon.com/128/10242/10242766.png" alt="Course Icon">
+        <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USERNAME:</h5>
+        <div class="course-title" id="course23">sivasankar221it056</div>
+        <button class="edit-btn" id="btn23" onclick="toggleEdit('course23', 'btn23', 'username')">Edit</button>
+    </div>
+
+    <div class="course">
+        <img class="course-icon" src="https://cdn-icons-png.flaticon.com/128/6516/6516888.png" alt="Course Icon">
+        <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PASSWORD:</h5>
+        <div class="course-title" id="course24">password</div>
+        <button class="edit-btn" id="btn24" onclick="toggleEdit('course24', 'btn24', 'password')">Edit</button>
+    </div>
+
+
+</div>
+
+<script>
+   const id=localStorage.getItem("id")
+   const token=localStorage.getItem("token")
+
+
+    async function Remove(){
+  
+            try {
+                const response = await fetch(`http://localhost:5000/remove/${id}`, {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                window.location.href="./Student_Details.html"
+              
+    }
+
+  catch(err){
+      console.log(err)
+  }}
+
+  function toggleEdit(courseId, btnId, title) {
+      const courseTitle = document.getElementById(courseId);
+      const button = document.getElementById(btnId);
+  
+      if (button.innerText === "Edit") {
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.value = courseTitle.innerText;
+          courseTitle.innerHTML = '';
+          courseTitle.appendChild(input);
+          button.innerText = "Save";
+      } else {
+          const input = courseTitle.getElementsByTagName('input')[0];
+          courseTitle.innerText = input.value;
+          button.innerText = "Edit";
+          const value=input.value
+          async function edit(){
+          try {
+                const response = await fetch('http://localhost:5000/editStudent', {
+                    method: 'PUT',
+                    headers: {
+                         Authorization:`Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ id, title, value }),
+                });
+
+                const data = await response.json();
+            
+              }
+              catch(err){
+                console.log(err)
+              }
+      }
+      edit()
+    }
+   
+  }
+  
+   
+    
+
+    async function getStudent() {
+            try {
+                const response = await fetch(`http://localhost:5000/student/${id}`, {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const student = await response.json();
+                const nameElement = document.getElementById('course1');
+                nameElement.innerHTML=student.name
+const regNoElement = document.getElementById('course2');
+ regNoElement.innerHTML=student.regNo
+const courseYearElement = document.getElementById('course3');
+courseYearElement.innerHTML=student.courseYear
+const departmentElement = document.getElementById('course4');
+departmentElement.innerHTML=student.course
+const dobElement = document.getElementById('course5');
+dobElement.innerHTML=student.dob
+const genderElement = document.getElementById('course6');
+genderElement.innerHTML=student.gender
+const phoneNumberElement = document.getElementById('course7');
+phoneNumberElement.innerHTML=student.studentPhone
+const emailElement = document.getElementById('course8');
+emailElement.innerHTML=student.studentEmail
+const roomNoElement = document.getElementById('course9');
+roomNoElement.innerHTML=student.roomNo
+const nativePlaceElement = document.getElementById('course10');
+nativePlaceElement.innerHTML=student.nativePlace
+const addressElement = document.getElementById('course11');
+addressElement.innerHTML=student.address
+const religionElement = document.getElementById('course12');
+religionElement.innerHTML=student.religion
+const casteElement = document.getElementById('course13');
+casteElement.innerHTML=student.caste
+const nationalityElement = document.getElementById('course14');
+nationalityElement.innerHTML=student.nationality
+const bloodGroupElement = document.getElementById('course15');
+bloodGroupElement.innerHTML=student.bloodgroup
+const motherNameElement = document.getElementById('course16');
+motherNameElement.innerHTML=student.motherName
+const fatherNameElement = document.getElementById('course17');
+fatherNameElement.innerHTML=student.fatherName
+const parentsPhoneNumberElement = document.getElementById('course18');
+parentsPhoneNumberElement.innerHTML=student.parentsno
+const parentsBankAccountElement = document.getElementById('course19');
+parentsBankAccountElement.innerHTML=student.accountNo
+const accountHolder=document.getElementById("course20")
+accountHolder.innerHTML=student.accountHolder
+const ifscCodeElement = document.getElementById('course21');
+ifscCodeElement.innerHTML=student.ifsc
+const branchElement = document.getElementById('course22');
+branchElement.innerHTML=student.branch
+const usernameElement = document.getElementById('course23');
+usernameElement.innerHTML=student.username
+const passwordElement = document.getElementById('course24');
+passwordElement.innerHTML=student.password
+document.getElementById("profile").src=student.photo
+document.getElementById("headingName").innerHTML=student.name
+document.getElementById("headingReg").innerHTML=student.regNo
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        getStudent()
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="./admin-style.css">
+    <style>
+        :root {
+            --background: #ffffff; /* Keep the existing background */
+            --color: #ffffff;
+            --button-form: #02a9a9; /* Teal color for 'Form Questions' */
+            --button-results: #aab700; /* Light blue color for 'Check Results' */
+            --button-clear: #074a00; /* Dark red color for 'Clear Database' */
+            --button-register: #001ba4; /* Green color for 'User Register' */
+            --button-logout: #930202; /* Red color for 'Logout' */
+        }
+
+        body {
+            margin: 0;
+            font-family: "Poppins", sans-serif;
+            background: var(--background); /* Keep the original background color */
+            color: var(--color);
+        }
+
+        .container-admin {
+            padding: 20px;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .styled-button {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-radius: 50px;
+            font-size: 18px;
+            text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+            color: var(--color);
+            width: 250px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .styled-button .icon {
+            margin-right: 10px;
+        }
+
+        .styled-button .separator {
+            flex-grow: 1;
+            border-bottom: 1px solid #ffffff;
+            margin: 0 10px;
+        }
+
+        .styled-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .button-questions {
+            background-color: var(--button-form); /* Teal for 'Form Questions' */
+        }
+
+        .button-results {
+            background-color: var(--button-results); /* Light blue for 'Check Results' */
+        }
+
+        .button-clear {
+            background-color: var(--button-clear); /* Dark red for 'Clear Database' */
+        }
+
+        .button-register {
+            background-color: var(--button-register); /* Green for 'User Register' */
+            
+        }
+
+        .button-logout {
+           
+           
+            background-color: var(--button-logout); /* Red for 'Logout' */
+            width: 120px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-admin">
+        <div class="button-container">
+            <a href="./Bank_Details.html" class="styled-button button-questions">
+                <div class="icon"><i class="fas fa-bank"></i></div>
+                <div class="separator"></div>
+                <div class="text">Bank Details</div>
+            </a>
+            <a href="./Students_Fees_Details.html" class="styled-button button-results">
+                <div class="icon"><i class="fas fa-book"></i></div>
+                <div class="separator"></div>
+                <div class="text">Fees Bill</div>
+            </a>
+            
+            <a href="./Students_Reguralpass_Details.html" class="styled-button button-register">
+                <div class="icon"><i class="fas fa-pen"></i></div>
+                <div class="separator"></div>
+                <div class="text">Regural Pass</div>
+            </a>
+           
+            <br>
+        </div>
+        <div class="styled-button button-logout" id="logoutButton">
+            <div class="icon"><i class="fas fa-lock"></i></div>
+            <div class="separator"></div>
+            <div class="text">Back</div>
+        </div>
+    </div>
+
+
+</body>
+</html>

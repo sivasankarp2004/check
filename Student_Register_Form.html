@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hostel Registration Form</title>
+    <style>
+        /* Base Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+        }
+        .form-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            width: 400px;
+            transition: transform 0.5s ease-in-out;
+        }
+       
+        h2 {
+            text-align: center;
+            color: #333;
+            font-size: 24px;
+        }
+        .input-box {
+            position: relative;
+            margin: 20px 0;
+        }
+        .input-box input, .input-box select, .input-box textarea {
+            width: 95%;
+            padding: 10px;
+            background: #f9f9f9;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background 0.3s ease-in-out;
+        }
+        .input-box input:focus, .input-box select:focus, .input-box textarea:focus {
+            background: #e9e9e9;
+        }
+        .input-box label {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #aaa;
+            font-size: 14px;
+            pointer-events: none;
+            transition: all 0.3s ease-in-out;
+        }
+        .input-box input:focus + label,
+        .input-box input:valid + label,
+        .input-box select:focus + label,
+        .input-box select:valid + label,
+        .input-box textarea:focus + label,
+        .input-box textarea:valid + label {
+            top: -20px;
+            left: 10px;
+            color: #333;
+            font-size: 12px;
+        }
+        .btn {
+            width: 100%;
+            padding: 10px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease-in-out;
+        }
+        .btn:hover {
+            background: #45a049;
+        }
+        .input-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #555;
+        }
+        .profile-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            overflow: hidden;
+        }
+        .profile-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .upload-btn {
+            display: block;
+            margin: 10px auto;
+            padding: 8px 16px;
+            background-color: #49ffdb;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .error-message {
+            color: red;
+            font-size: 12px;
+            display: none;
+        }
+        .hidden {
+    display: none; /* Or adjust visibility as needed */
+}
+
+        /* Mobile Styles */
+        @media (max-width: 600px) {
+            .form-container {
+                width: 90%;
+                padding: 15px;
+            }
+            h2 {
+                font-size: 20px;
+            }
+            .input-box input, .input-box select, .input-box textarea {
+                font-size: 14px;
+            }
+            .btn {
+                font-size: 14px;
+            }
+            .input-title {
+                font-size: 16px;
+            }
+            .profile-photo {
+                width: 80px;
+                height: 80px;
+            }
+            .upload-btn {
+                font-size: 14px;
+                padding: 6px 12px;
+            }
+            .error-message {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container" id="access" style="display: none;">
+        <h2 class="animated-text">Hostel Registration Form</h2>
+        <form id="hostelForm">
+            <div class="profile-photo" id="profilePhoto">
+                <img id="photoPreview" src="https://cdn-icons-png.flaticon.com/512/9203/9203764.png" alt="Profile Photo">
+            </div>
+            <input type="file" id="photoInput" accept="image/*"required>
+            <button type="button" class="upload-btn" onclick="document.getElementById('photoInput').click();">Upload Photo</button>
+            <div id="errorMessage" class="error-message">File size exceeds 1MB. Please upload a smaller file.</div>
+            
+            <!-- Name -->
+            <div class="input-box">
+                <input type="text" id="name" required style="text-transform: uppercase;">
+                <label for="name">Name</label>
+            </div>
+            
+            <!-- Register No -->
+            <div class="input-box">
+                <input type="text" id="regNo" required style="text-transform: uppercase;">
+                <label for="regNo">Register No</label>
+            </div>
+            <!-- Course Year -->
+            <div class="input-box">
+                <select id="courseYear" required>
+                    <option value="" disabled selected></option>
+                    <option value="1st Year">1st Year</option>
+                    <option value="2nd Year">2nd Year</option>
+                    <option value="3rd Year">3rd Year</option>
+                </select>
+                <label for="courseYear">Course Year</label>
+            </div>
+            <!-- Department -->
+            <div class="input-title">Select Your Education Type</div>
+            <select name="educationType" id="educationType" required>
+                <option value="" disabled selected>--- Select course ---</option>
+                <option value="UNAIDED-UG">UNAIDED-UG</option>
+                <option value="AIDED-UG">AIDED-UG</option>
+                <option value="UNAIDED-PG">UNAIDED-PG</option>
+                <option value="AIDED-PG">AIDED-PG</option>
+            </select>
+
+
+            <div id="courseOptions" class="input-box">
+                <label for="courseSelect"></label>
+                <select id="courseSelect" class="hidden" required>
+                    <option disabled selected>---Select course---</option>
+                </select>
+            </div>
+            
+            
+            <!-- Date of Birth -->
+            <div class="input-box">
+                <h5>Date of Birth</h5>
+                <input type="date" id="dob" required>
+                <label for="dob"></label>
+            </div>
+
+              <!-- Date of Birth -->
+              <div class="input-box">
+                <select id="gender" required>
+                    <option value="" disabled selected>Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+                <label for="gender"></label>
+            </div>
+            
+            <!-- Student Phone Number -->
+            <div class="input-box">
+                <input type="tel" id="studentPhone" required pattern="[0-9]{10}">
+                <label for="studentPhone">Phone Number</label>
+            </div>
+            <!-- Student Email -->
+            <div class="input-box">
+                <input type="email" id="studentEmail" required style="text-transform: LowerCase;">
+                <label for="studentEmail">Email</label>
+            </div>
+            <!-- Hostel Room No -->
+            <div class="input-box">
+                <input type="text" id="roomNo" required>
+                <label for="roomNo">Hostel Room No</label>
+            </div>
+            <!-- Native Place -->
+            <div class="input-box">
+                <input type="text" id="nativePlace" required style="text-transform: uppercase;">
+                <label for="nativePlace">Native Place</label>
+            </div>
+            <!-- Address -->
+            <div class="input-box">
+                <textarea id="address" rows="3" required style="text-transform: uppercase;"></textarea>
+                <label for="address">Address</label>
+            </div>
+            <!-- Religion -->
+            <div class="input-box">
+                <input type="text" id="religion" required style="text-transform: uppercase;">
+                <label for="religion">Religion</label>
+            </div>
+            <!-- Caste -->
+            <div class="input-box">
+                <input type="text" id="caste" required style="text-transform: uppercase;">
+                <label for="caste">Caste</label>
+            </div>
+            <div class="input-box">
+                <input type="text" id="nationality" required style="text-transform: uppercase;">
+                <label for="nationality">Nationality</label>
+            </div>
+            <div class="input-box">
+                <input type="text" id="bloodgroup" required>
+                <label for="bloodgroup">Blood Group</label>
+            </div>
+
+            <!-- Parents Details -->
+            <div class="input-title">Parents Details</div>
+            <!-- Mother's Name -->
+            <div class="input-box">
+                <input type="text" id="motherName" required style="text-transform: uppercase;">
+                <label for="motherName">Mother's Name</label>
+            </div>
+          
+            <!-- Father's Name -->
+            <div class="input-box">
+                <input type="text" id="fatherName" required style="text-transform: uppercase;">
+                <label for="fatherName">Father's Name</label>
+            </div>
+         
+
+             <!-- parents Mobile Number -->
+             <div class="input-box">
+                <input type="tel" id="parentsno" required >
+                <label for="parentsno">Parents Mobile Number</label>
+            </div>
+
+            <!-- Bank Details -->
+            <div class="input-title">Bank Details</div>
+            <!-- Account Number -->
+            <div class="input-box">
+                <input type="text" id="accountNo" required>
+                <label for="accountNo">Parents Account Number</label>
+            </div>
+            <!-- Account Holder Name -->
+            <div class="input-box">
+                <input type="text" id="accountHolder" required style="text-transform: uppercase;">
+                <label for="accountHolder">Parents Account Holder Name</label>
+            </div>
+            <!-- IFSC Code -->
+            <div class="input-box">
+                <input type="text" id="ifsc" required style="text-transform: uppercase;">
+                <label for="ifsc">IFSC Code</label>
+            </div>
+            <!-- Branch -->
+            <div class="input-box">
+                <input type="text" id="branch" required style="text-transform: uppercase;">
+                <label for="branch">Branch</label>
+            </div>
+
+            <!-- Account Details -->
+            <div class="input-title">Register</div>
+            <!-- Username -->
+            <div class="input-box">
+                <input type="text" id="username" required style="text-transform: uppercase;">
+                <label for="username">Username</label>
+            </div>
+            <!-- Password -->
+            <div class="input-box">
+                <input type="password" id="password" required>
+                <label for="password">Password</label>
+            </div>
+            <!-- Confirm Password -->
+            <div class="input-box">
+                <input type="password" id="confirmPassword" required>
+                <label for="confirmPassword">Confirm Password</label>
+            </div>
+            <div id="passwordErrorMessage" class="error-message">Passwords do not match. Please try again.</div>
+
+            <!-- Mobile Error Message -->
+            <div id="mobileErrorMessage" class="error-message">Please enter different numbers for Student Phone, Mother's Mobile, and Father's Mobile.</div>
+            
+            <!-- Submit Button -->
+            <button type="submit" class="btn">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        const photoInput = document.getElementById('photoInput');
+        const errorMessage = document.getElementById('errorMessage');
+        const photoPreview = document.getElementById('photoPreview');
+        
+        photoInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            
+            if (file) {
+                if (file.size > 1 * 1024 * 1024) { // 1MB in bytes
+                    errorMessage.style.display = 'block';
+                    photoInput.value = ''; // Clear the file input
+                    photoPreview.src = 'https://cdn-icons-png.flaticon.com/512/9203/9203764.png'; // Reset to default
+                } else {
+                    errorMessage.style.display = 'none';
+                    
+                    // Display selected image
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        photoPreview.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
+
+
+
+        document.getElementById('hostelForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+
+    const formData = new FormData();
+    const photoInput = document.getElementById('photoInput');
+    
+    formData.append('photo', photoInput.files[0]); // Append the photo file
+    formData.append('name', document.getElementById('name').value);
+    formData.append('regNo', document.getElementById('regNo').value);
+    formData.append('courseYear', document.getElementById('courseYear').value);
+    formData.append('educationType', document.getElementById('educationType').value);
+    formData.append('course', document.getElementById('courseSelect').value);
+    formData.append('dob', document.getElementById('dob').value);
+    formData.append('gender', document.getElementById('gender').value);
+    formData.append('studentPhone', document.getElementById('studentPhone').value);
+    formData.append('studentEmail', document.getElementById('studentEmail').value);
+    formData.append('roomNo', document.getElementById('roomNo').value);
+    formData.append('nativePlace', document.getElementById('nativePlace').value);
+    formData.append('address', document.getElementById('address').value);
+    formData.append('religion', document.getElementById('religion').value);
+    formData.append('caste', document.getElementById('caste').value);
+    formData.append('nationality', document.getElementById('nationality').value);
+    formData.append('bloodgroup', document.getElementById('bloodgroup').value);
+    formData.append('motherName', document.getElementById('motherName').value);
+    formData.append('fatherName', document.getElementById('fatherName').value);
+    formData.append('parentsno', document.getElementById('parentsno').value);
+    formData.append('accountNo', document.getElementById('accountNo').value);
+    formData.append('accountHolder', document.getElementById('accountHolder').value);
+    formData.append('ifsc', document.getElementById('ifsc').value);
+    formData.append('branch', document.getElementById('branch').value);
+    formData.append('username', document.getElementById('username').value);
+    formData.append('password', document.getElementById('password').value);
+
+    try {
+        const response = await fetch('http://localhost:5000/register', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await response.json();
+
+        if (response.ok) {
+            window.location.href = 'Submit.html';
+        } else {
+            alert('Error: ' + data.message);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred during registration');
+    }
+});
+
+        // document.getElementById('hostelForm').addEventListener('submit', function(event) {
+        //     event.preventDefault();
+            
+        //     const password = document.getElementById('password').value;
+        //     const confirmPassword = document.getElementById('confirmPassword').value;
+            
+        //     const studentPhone = document.getElementById('studentPhone').value;
+        //     const motherMobile = document.getElementById('motherMobile').value;
+        //     const fatherMobile = document.getElementById('fatherMobile').value;
+
+        //     let isValid = true;
+
+        //     // Check for matching passwords
+        //     if (password !== confirmPassword) {
+        //         document.getElementById('passwordErrorMessage').style.display = 'block';
+        //         isValid = false;
+        //     } else {
+        //         document.getElementById('passwordErrorMessage').style.display = 'none';
+        //     }
+
+        //     // Check for matching mobile numbers
+        //     if (studentPhone === motherMobile || studentPhone === fatherMobile || motherMobile === fatherMobile) {
+        //         document.getElementById('mobileErrorMessage').style.display = 'block';
+        //         isValid = false;
+        //     } else {
+        //         document.getElementById('mobileErrorMessage').style.display = 'none';
+        //     }
+
+        //     if (isValid) {
+        //         alert('Form Submitted Successfully!');
+        //     }
+        // });
+
+        document.getElementById('educationType').addEventListener('change', function() {
+            var selectedValue = this.value;
+            var courseSelect = document.getElementById('courseSelect');
+            var optionsHTML = '';
+
+            switch (selectedValue) {
+                case 'AIDED-UG':
+                    optionsHTML = `
+                        <option disabled selected>---Select course---</option>
+                        <option value="ba_english_literature">B.A. English Literature</option>
+                        <option value="bsc_mathematics">B.Sc. Mathematics</option>
+                        <option value="bsc_physics">B.Sc. Physics</option>
+                        <option value="bsc_chemistry">B.Sc. Chemistry</option>
+                        <option value="bsc_botany">B.Sc. Botany</option>
+                        <option value="bsc_zoology">B.Sc. Zoology</option>
+                        <option value="bsc_biochemistry">B.Sc. Biochemistry</option>
+                        <option value="bsc_computer_science">B.Sc. Computer Science</option>
+                    `;
+                    break;
+                case 'UNAIDED-PG':
+                    optionsHTML = `
+                        <option disabled selected>---Select course---</option>
+                        <option value="ma_english_literature">M.A. English Literature</option>
+                        <option value="ma_tamil_literature">M.A. Tamil Literature</option>
+                        <option value="mcom_with_ca">M.Com With CA</option>
+                        <option value="mcom">M.Com</option>
+                        <option value="msc_wildlife_biology">M.Sc. Wildlife Biology</option>
+                        <option value="msc_biotechnology">M.Sc. Biotechnology</option>
+                    `;
+                    break;
+                case 'AIDED-PG':
+                    optionsHTML = `
+                        <option disabled selected>---Select course---</option>
+                        <option value="msc_mathematics">M.Sc. Mathematics</option>
+                        <option value="msc_physics">M.Sc. Physics</option>
+                        <option value="msc_botany">M.Sc. Botany</option>
+                        <option value="msc_zoology">M.Sc. Zoology</option>
+                    `;
+                    break;
+                case 'UNAIDED-UG':
+                    optionsHTML = `
+                        <option disabled selected>---Select course---</option>
+                        <option value="bba_ca">BBA CA</option>
+                        <option value="bcom">B.Com.</option>
+                        <option value="bcom_ca">B.Com. CA</option>
+                        <option value="bcom_pa_professional_accounting">B.Com. (PA) Professional Accounting</option>
+                        <option value="bcom_banking_insurance">B.Com. Banking & Insurance</option>
+                        <option value="bcom_accounting_finance">B.Com. Accounting & Finance</option>
+                        <option value="bcom_information_technology">B.Com. Information Technology</option>
+                        <option value="bsc_psychology">B.Sc. Psychology</option>
+                        <option value="bsc_biotechnology">B.Sc. Biotechnology</option>
+                        <option value="bsc_computer_science">B.Sc. Computer Science</option>
+                        <option value="bsc_computer_technology">B.Sc. Computer Technology</option>
+                        <option value="bsc_information_technology">B.Sc. Information Technology</option>
+                        <option value="bsc_costume_design_fashion">B.Sc. Costume Design & Fashion</option>
+                        <option value="bsc_cs_data_analytics">B.Sc. CS with Data Analytics</option>
+                        <option value="bsc_ai_ml">B.Sc. Artificial Intelligence & Machine Learning</option>
+                        <option value="bca">BCA</option>
+                    `;
+                    break;
+                default:
+                    optionsHTML = '<option disabled selected>---Select course---</option>';
+            }
+
+            // Populate options and ensure the select element is visible
+            courseSelect.innerHTML = optionsHTML;
+
+            // Show the select if options are available
+            if (optionsHTML.trim()) {
+                courseSelect.classList.remove('hidden'); // Ensure it is visible when options are populated
+            } else {
+                courseSelect.classList.add('hidden'); // Hide if no options are available
+            }
+        });
+
+
+
+        async function getAccess() {
+    
+
+
+    try {
+                const response = await fetch("http://localhost:5000/access", {
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data =await response.json()
+                 if(data.response.status=="on"){
+                     document.getElementById("access").style.display="block"
+                 }
+                 else{
+                    localStorage.removeItem("token")
+                    document.body.innerHTML="No Access"
+                    alert("Dont do this again")
+                 }
+                
+          
+            }
+    catch(err){
+        console.log(err)
+    }
+    
+    }
+
+    getAccess()
+
+
+
+
+
+        document.getElementById('myForm').addEventListener('submit', function(event) {
+            var courseSelect = document.getElementById('courseSelect');
+            
+            if (!courseSelect.value || courseSelect.value === "---Select course---") {
+                event.preventDefault(); // Prevent form submission
+                alert('Please select a course.');
+                courseSelect.classList.remove('hidden'); // Show the select element if it was hidden
+            }
+        });
+
+    
+
+    </script>
+</body>
+</html>

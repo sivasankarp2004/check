@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Warden Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f8f9fd;
+      overflow-x: hidden; /* Prevent horizontal scrolling */
+    }
+
+    .header {
+      background: linear-gradient(135deg, #a44ae4, #4e9dfc);
+      padding: 20px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      animation: fadeIn 0.5s ease-in-out; /* Fade-in effect */
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .header-content {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .greeting h2 {
+      font-size: 1.5em;
+      transition: color 0.3s ease;
+      animation: slideIn 0.5s forwards; /* Slide-in effect */
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .greeting span {
+      font-weight: bold;
+    }
+
+    .date-selector {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+
+    .date-selector span {
+      padding: 5px 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .date-selector .selected {
+      background-color: #fff;
+      color: #4e9dfc;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .date-selector span:hover {
+      background-color: rgba(255, 255, 255, 0.7);
+      color: #4e9dfc;
+      transform: scale(1.1);
+      transition: transform 0.3s ease;
+    }
+
+    .profile-img {
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .profile-img:hover {
+      transform: scale(1.1);
+    }
+
+    .search-bar {
+      margin: 20px;
+      padding: 10px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s ease;
+    }
+
+    .search-bar:hover {
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .search-bar input {
+      width: 100%;
+      border: none;
+      outline: none;
+      padding: 10px;
+      transition: background-color 0.3s ease;
+    }
+
+    .search-bar input:focus {
+      background-color: #eaeaea;
+    }
+
+    .whitepass {
+      padding: 20px;
+    }
+
+    .whitepass h3 {
+      margin-bottom: 10px;
+      font-size: 1.5em;
+      transition: color 0.3s ease;
+      color: #333;
+      text-align: center;
+      animation: fadeIn 0.5s ease-in-out; /* Fade-in effect for header */
+    }
+
+    .yellowpass {
+      padding: 20px;
+    }
+
+    .yellowpass h3 {
+      margin-bottom: 10px;
+      font-size: 1.5em;
+      transition: color 0.3s ease;
+      color: #333;
+      text-align: center;
+      animation: fadeIn 0.5s ease-in-out; /* Fade-in effect for header */
+    }
+
+    .subjects {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+    }
+
+    .subject-card {
+      background-color: white;
+      border-radius: 10px;
+      padding: 20px;
+      width: 45%;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative; /* Position for hover effect */
+      overflow: hidden; /* Hide overflow for hover effect */
+    }
+
+    .subject-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(78, 157, 252, 0.2);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 0; /* Behind the content */
+    }
+
+    .subject-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .subject-card:hover::before {
+      opacity: 1; /* Show overlay on hover */
+    }
+
+    .subject-card h4 {
+      margin-bottom: 5px;
+      position: relative; /* Position for text animation */
+      z-index: 1; /* Above the overlay */
+    }
+
+    .subject-card .progress-circle {
+      width: 50px;
+      height: 50px;
+      background-color: #eaeaea;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 10px auto 0;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .subject-card .progress-circle.complete {
+      background-color: #4e9dfc;
+      color: white;
+      font-weight: bold;
+    }
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    .subject-card1 {
+      background-color: rgb(120, 227, 235);
+      border-radius: 10px;
+      padding: 20px;
+      width: 30%;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative; /* Position for hover effect */
+      overflow: hidden; /* Hide overflow for hover effect */
+    }
+
+    .subject-card1::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(78, 157, 252, 0.2);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 0; /* Behind the content */
+    }
+
+    .subject-card1:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .subject-card1:hover::before {
+      opacity: 1; /* Show overlay on hover */
+    }
+
+    .subject-card1 h4 {
+      margin-bottom: 5px;
+      position: relative; /* Position for text animation */
+      z-index: 1; /* Above the overlay */
+    }
+
+    .subject-card1 .progress-circle {
+      width: 50px;
+      height: 50px;
+      background-color: #eaeaea;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 10px auto 0;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .subject-card1 .progress-circle.complete {
+      background-color: #4e9dfc;
+      color: white;
+      font-weight: bold;
+    }
+
+    .progress-circle:hover {
+      transform: scale(1.1);
+    }
+
+    .bottom-nav {
+      background-color: white;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-item {
+      text-align: center;
+      font-size: 0.9em;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    .nav-item:hover {
+      color: #4e9dfc;
+      transform: translateY(-3px);
+    }
+
+    header {
+  background-color: #4CAF50; /* Green background */
+  color: white; /* White text */
+  text-align: center; /* Center the text */
+  padding: 20px; /* Add some padding */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+}
+
+
+h1 {
+  font-size: 22px; /* Large font for header title */
+  font-family: 'Times New Roman', serif;
+  text-align: center;
+  margin: 0; /* Remove default margin */
+  letter-spacing: 2px; /* Spacing between letters */
+}
+ h5 {
+  font-size: 10px; /* Large font for header title */
+  font-family: 'Times New Roman', serif;
+  margin: 0; /* Remove default margin */
+  letter-spacing: 2px; /* Spacing between letters */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px); /* Start slightly higher */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* End in normal position */
+  }
+}
+
+@keyframes colorChange {
+  0% {
+    color: #158268; /* Initial color */
+  }
+  50% {
+    color: #1623ac; /* Change to blue */
+  }
+  100% {
+    color: #d70000; /* Back to original color */
+  }
+}
+
+h6 {
+  font-size: 35px; /* Large font for header title */
+  font-family: 'Times New Roman', serif;
+  margin: 0; /* Remove default margin */
+  letter-spacing: 2px; /* Spacing between letters */
+  color: #333; /* Text color */
+  text-shadow: 
+    1px 1px 0 #fff, /* White shadow */
+    2px 2px 0 #ccc, /* Light gray shadow */
+    3px 3px 0 #999; /* Dark gray shadow */
+  animation: fadeIn 0.5s ease-in-out, colorChange 1s infinite alternate; /* Fade-in and color change animations */
+}
+
+h6:hover {
+  transform: scale(1.05) rotate(5deg); /* Slightly enlarge and rotate on hover */
+  transition: transform 0.3s ease, color 0.3s ease; /* Smooth transition for transform and color */
+  color: #007bff; /* Change color on hover */
+}
+
+p5 {
+  font-size: 8px; /* Large font for header title */
+  font-family: 'Times New Roman', serif;
+  margin: 0; /* Remove default margin */
+  letter-spacing: 2px; /* Spacing between letters */
+}
+
+p6 {
+  font-size: 20px;
+  font-family: 'Times New Roman', serif;
+  color: rgb(192, 15, 15);
+  margin: 0;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+  line-height: 1.5; /* Adjust for better readability */
+}
+
+.dashboard-title {
+    font-size: 2em;
+    font-weight: bold;
+    color: #08087a;
+    text-align: center;
+    text-transform: uppercase;
+    text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3), 
+                 -3px -3px 10px rgba(255, 255, 255, 0.2);
+    letter-spacing: 5px;
+    margin: 50px 0;
+ 
+}
+
+
+header nav {
+  margin-top: 10px; /* Space between title and navigation */
+}
+
+header nav a {
+  color: white; /* White text for links */
+  text-decoration: none; /* Remove underline from links */
+  margin: 0 15px; /* Add space between links */
+  font-size: 18px; /* Set link font size */
+  font-weight: bold; /* Make links bold */
+  transition: color 0.3s ease; /* Smooth color transition */
+}
+
+header nav a:hover {
+  color: #ffeb3b; /* Yellow color on hover */
+}
+
+.logout-btn {
+          
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .logout-btn:hover {
+            background: linear-gradient(135deg, #ff4b2b, #ff416c);
+        }
+
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .subject-card {
+        width: 90%; /* Full width on smaller screens */
+      }
+
+      .header-content {
+        align-items: center; /* Center align for mobile */
+      }
+    }
+    .profile-container {
+    display: flex;
+    align-items: center; /* Vertically centers the image and text */
+}
+
+.profile-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%; /* Makes the image round */
+    margin-right: 10px; /* Adds space between the image and the text */
+}
+
+  </style>
+</head>
+<body>
+  <!-- Header Section -->
+  <header class="header">
+    <div class="header-content">
+      <div class="greeting">
+
+    <h5>KONGUNADU ARTS AND SCIENCE COLLEGE</h5>
+    <h5>(AUTONOMOUS)</h5>
+        
+        <div class="date-selector">
+          <span>Mon</span>
+          <span>Tue</span>
+          <span>Wed</span>
+          <span>Thu</span>
+          <span>Fri</span>
+          <span>Sat</span>
+          <span>Sun</span>
+        </div>
+      </div>
+    </div>
+    
+  </header>
+
+  <!-- Search Bar -->
+  <div class="search-bar">
+    <div class="profile-container">
+      <img src="https://cdn-icons-png.flaticon.com/128/2302/2302834.png" alt="Profile Image" class="profile-img">
+      <h7>Welcome Siva</h7>
+  </div>
+  
+  </div>
+
+ <!-- Homework Section -->
+  <section class="homework-section">
+    <h1 class="dashboard-title">DASHBOARD</h1>
+    <div class="subjects">
+
+
+      <div class="subject-card1" onclick="window.location.href='./Warden_check_Whitpass_Requests.html'">
+        
+        <h4>Total Boys Students</h4>
+        <h6>22</h6>
+      </div>
+
+       <div class="subject-card1" onclick="window.location.href='./Warden_check_Whitpass_Requests.html'">
+
+        <h4>Total Girls Students</h4>
+        <h6>22</h6>
+      </div>
+
+      <div class="subject-card1" onclick="window.location.href='./Warden_check_Whitpass_Requests.html'">
+        
+        <h4>Total Students &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+        <h6>44</h6>
+      </div>
+
+      <div class="subject-card" onclick="window.location.href='./Warden_check_Whitpass_Requests.html'">
+        <img src="https://cdn-icons-png.flaticon.com/128/6436/6436658.png" >
+        <h4>⚪White Pass Request</h4>
+        <p6>22 Pass Request is Balance</p6>
+      </div>
+
+
+      <div class="subject-card" onclick="window.location.href='./Warden_check_Yellowpass_Requests.html'">
+        <img src="https://cdn-icons-png.flaticon.com/128/6436/6436660.png" >
+        <h4>🟡Yellow Pass Request</h4>
+        <p6>8 Pass Request is Balance</p6>
+      </div>
+
+
+      <div class="subject-card" onclick="window.location.href='./Warden_check_Reguralpass_Requests.html'">
+        <img src="https://cdn-icons-png.flaticon.com/128/8442/8442040.png" >
+        <h4>Regural Pass Request</h4>
+        <p6>2 Pass Request is Balance</p6>
+      </div>
+
+
+      <div class="subject-card" onclick="window.location.href='./Warden_Settings.html'">
+        <img src="https://cdn-icons-png.flaticon.com/128/10884/10884792.png" >
+        <h4>Settings</h4>
+      </div>
+
+ 
+      <div class="subject-card" onclick="window.location.href='./Say_Information.html'">
+            <img src="https://cdn-icons-png.flaticon.com/128/4213/4213265.png" >
+            <h4>Information</h4>
+          </div>
+
+
+          <div class="subject-card" onclick="window.location.href='./Student_Details.html'">
+        <img src="https://cdn-icons-png.flaticon.com/128/13219/13219851.png" >
+        <h4>Student Details</h4>
+      </div>
+
+
+      <div class="subject-card" onclick="window.location.href='./Attendance_record.html'">
+        <img src="https://cdn-icons-png.flaticon.com/128/10156/10156021.png" >
+        <h4>Attendance</h4>
+      </div>
+
+
+
+      <div class="subject-card" onclick="window.location.href='./print.html'">
+        <img src="https://cdn-icons-png.flaticon.com/128/15270/15270567.png" >
+        <h4>Print</h4>
+      </div>
+     
+    </div>
+ 
+  </section>
+
+  <center><button class="logout-btn" onclick="logout()">Logout</button></center>
+<br>
+<br>
+
+
+<script>
+  // Get the current day of the week (0 = Sunday, 1 = Monday, etc.)
+  const currentDay = new Date().getDay();
+
+  // Map of days corresponding to their index
+  const days = document.querySelectorAll('.date-selector span');
+
+  // Remove 'selected' class from any previously selected day
+  days.forEach(day => day.classList.remove('selected'));
+
+  // Apply the 'selected' class to the current day
+  // Adjust for Monday as the first day (1 = Mon, 2 = Tue, ..., 0 = Sun)
+  const dayIndex = currentDay === 0 ? 6 : currentDay - 1;
+  days[dayIndex].classList.add('selected');
+
+   
+
+  function checkToken() {
+      const token = localStorage.getItem('token'); // Retrieve token from localStorage
+
+      // If there's no token, redirect to the login page
+      if (!token) {
+        window.location.href = 'Login_Page.html'; // Replace with your actual login page URL
+      }
+    }
+
+    // Call the function to check token when the page loads
+    window.onload = checkToken;
+
+
+
+  function logout() {
+            // Add logout functionality here
+            // alert("Logging out...");
+            // Redirect to login page, for example:
+            localStorage.removeItem("token")
+            window.location.href = "Login_Page.html";
+        }
+</script>
+</body>
+</html>

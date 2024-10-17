@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Details</title>
+    <style>
+        /* Same styles as before */
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1a202c;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #e2e8f0;
+        }
+
+        .form-container {
+            background-color: #2d3748;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            max-width: 500px;
+            width: 100%;
+            animation: slideIn 0.5s ease forwards;
+        }
+
+        h2 {
+            text-align: center;
+            color: #63b3ed;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .profile-image {
+            display: block;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 20px;
+            border: 3px solid #63b3ed;
+        }
+
+        label {
+            display: block;
+            margin: 15px 0 5px;
+            font-weight: 600;
+            color: #edf2f4;
+        }
+
+        .input-container {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        input, textarea, select {
+            width: 95%;
+            padding: 12px;
+            border: 1px solid #4a5568;
+            border-radius: 99px;
+            background-color: #4a5568;
+            color: #e2e8f0;
+            font-size: 14px;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: #63b3ed;
+            outline: none;
+        }
+
+        .edit-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #63b3ed;
+            font-size: 18px;
+        }
+
+        button {
+            background-color: #63b3ed;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #4299e1;
+        }
+
+        #saveButton {
+            background-color: #48bb78;
+        }
+
+        #saveButton:hover {
+            background-color: #38a169;
+        }
+
+        @media (max-width: 500px) {
+            .profile-image {
+                width: 120px;
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Warden Profile Details</h2>
+        <img src="" alt="Profile Photo" id="profileImage" class="profile-image">
+        
+        <form id="profileForm">
+            <label for="wardenName">Name:</label>
+            <div class="input-container">
+                <input type="text" id="wardenName" disabled>
+            </div>
+
+            <label for="wardenPhone">Phone:</label>
+            <div class="input-container">
+                <input type="text" id="wardenPhone" disabled>
+                <span class="edit-icon" onclick="editField('wardenPhone')">✏️</span>
+            </div>
+
+            <label for="gender">Gender:</label>
+            <div class="input-container">
+                <select id="gender" onclick="editField('gender')">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <label for="hostel">Hostel:</label>
+            <div class="input-container" >
+                <select id="hostel" onclick="editField('hostel')">
+                    <option value="boyshostel">Boys Hostel</option>
+                    <option value="girlshostel">Girls Hostel</option>
+                </select>
+            </div>
+
+            <button type="button" id="saveButton" style="display:none;" onclick="saveChanges()">Save</button>
+            <br>
+
+            <button type="button" onclick="goBack()">Back</button>
+        </form>
+    </div>
+
+    <script>
+        async function loadProfileDetails() {
+            const token = localStorage.getItem("token");
+    
+            try {
+                const response = await fetch("http://localhost:5000/warden/get", {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                // Populate the form with profile details
+                document.getElementById('wardenName').value = data.response.wardenName;
+                document.getElementById('wardenPhone').value = data.response.wardenPhone;
+                document.getElementById('gender').value = data.response.gender;
+                document.getElementById('hostel').value = data.response.hostel;
+    
+                // Set the profile image
+                const profileImageUrl = data.response.photo;
+                document.getElementById('profileImage').src = profileImageUrl;
+    
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    
+        function editField(fieldId) {
+            const input = document.getElementById(fieldId);
+            input.disabled = false;
+            input.focus();
+    
+            // Show save button when editing starts
+            document.getElementById('saveButton').style.display = 'block';
+        }
+    
+        async function saveChanges() {
+            const token = localStorage.getItem("token");
+    
+            const updatedData = {
+                wardenName: document.getElementById('wardenName').value,
+                wardenPhone: document.getElementById('wardenPhone').value,
+                gender: document.getElementById('gender').value,
+                hostel: document.getElementById('hostel').value
+            };
+    
+            try {
+                const response = await fetch("http://localhost:5000/warden/update", {
+                    method: "PUT",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedData)
+                });
+    
+                if (response.ok) {
+                    alert('Changes saved successfully!');
+                } else {
+                    const errorData = await response.json();
+                    alert(`Error: ${errorData.message}`);
+                }
+    
+            } catch (err) {
+                console.log(err);
+                alert('Failed to save changes');
+            }
+    
+            const inputs = document.querySelectorAll('input, select');
+            inputs.forEach(input => input.disabled = true);
+    
+            document.getElementById('saveButton').style.display = 'none';
+        }
+    
+        function goBack() {
+            window.history.back();
+        }
+    
+        loadProfileDetails();
+    </script>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fees Submission Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .search-input {
+            padding: 10px;
+            font-size: 16px;
+            width: 80%;
+            max-width: 400px;
+        }
+
+        .print-button,
+        .download-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        table {
+            width: 100%;
+            max-width: 800px;
+            border-collapse: collapse;
+            margin: 20px auto;
+            overflow-x: auto;
+            display: block;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        th {
+            background-color: #28a745;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .profile-photo img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 22px;
+            }
+
+            th, td {
+                font-size: 14px;
+                padding: 8px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            table, table * {
+                visibility: visible;
+            }
+            table {
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+            /* Hide the Bill Upload column */
+            th:nth-child(6), td:nth-child(6) {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Fees Submission Results</h1>
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search by Name, Register No, Bill No, or Semester">
+        </div>
+        <button class="print-button" onclick="printPage()">Print Results</button>
+        <button class="download-button" onclick="downloadExcel()">Download Excel</button>
+        <div id="error" class="error" style="display: none;"></div>
+        <table id="resultsTable">
+            <thead>
+                <tr>
+                    <th>Profile Photo</th>
+                    <th>Name</th>
+                    <th>Register Number</th>
+                    <th>Room no</th>
+                    <th>Reason</th>
+                    <th>Time in</th>
+                    <th>Time out</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Example data -->
+                <tr>
+                    <td class="profile-photo"><img src="https://via.placeholder.com/50" alt="John Doe's Photo"></td>
+                    <td>John Doe</td>
+                    <td>123456</td>
+                    <td>101</td>
+                    <td>Study</td>
+                    <td>08:00 AM</td>
+                    <td>05:00 PM</td>
+                </tr>
+                <tr>
+                    <td class="profile-photo"><img src="https://via.placeholder.com/50" alt="Jane Smith's Photo"></td>
+                    <td>Jane Smith</td>
+                    <td>789012</td>
+                    <td>102</td>
+                    <td>Meeting</td>
+                    <td>09:30 AM</td>
+                    <td>04:30 PM</td>
+                </tr>
+                <tr>
+                    <td class="profile-photo"><img src="https://via.placeholder.com/50" alt="Alice Brown's Photo"></td>
+                    <td>Alice Brown</td>
+                    <td>345678</td>
+                    <td>103</td>
+                    <td>Workshop</td>
+                    <td>10:00 AM</td>
+                    <td>06:00 PM</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function printPage() {
+            window.print();
+        }
+
+        function downloadExcel() {
+            const data = [
+                {
+                    'Profile Photo': 'https://via.placeholder.com/50',
+                    Name: 'John Doe',
+                    'Register Number': '123456',
+                    'Room no': '101',
+                    Reason: 'Study',
+                    'Time in': '08:00 AM',
+                    'Time out': '05:00 PM'
+                },
+                {
+                    'Profile Photo': 'https://via.placeholder.com/50',
+                    Name: 'Jane Smith',
+                    'Register Number': '789012',
+                    'Room no': '102',
+                    Reason: 'Meeting',
+                    'Time in': '09:30 AM',
+                    'Time out': '04:30 PM'
+                },
+                {
+                    'Profile Photo': 'https://via.placeholder.com/50',
+                    Name: 'Alice Brown',
+                    'Register Number': '345678',
+                    'Room no': '103',
+                    Reason: 'Workshop',
+                    'Time in': '10:00 AM',
+                    'Time out': '06:00 PM'
+                }
+            ];
+
+            const worksheet = XLSX.utils.json_to_sheet(data);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Submissions');
+
+            // Create a download link and trigger the download
+            XLSX.writeFile(workbook, 'fees_submissions.xlsx');
+        }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pass Selection</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            height: 100vh; 
+            display: flex;
+            justify-content: center; 
+            align-items: center; 
+            background: linear-gradient(145deg, #f3f4f6, #e0e0e0);
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            padding: 40px;
+            border-radius: 20px;
+            background: white;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 30px;
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        select {
+            padding: 15px;
+            font-size: 18px;
+            border: 2px solid #007bff;
+            border-radius: 10px;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: border-color 0.3s, background-color 0.3s;
+            appearance: none;
+            outline: none;
+            position: relative;
+        }
+
+        select:focus {
+            border-color: #0056b3;
+            background-color: #e9ecef;
+        }
+
+        .arrow {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            font-size: 20px;
+            color: #007bff;
+        }
+
+        .ripple {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            background: rgba(0, 123, 255, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: -1;
+        }
+
+        .animation-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.05);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Select a Pass Type</h1>
+        <div style="position: relative;">
+            <select id="passSelect">
+                <option value="" disabled selected>Select your option</option>
+                <option value="white" id="white" style="display: none;">White Pass</option>
+                <option value="yellow" id="yellow"style="display: none;">Yellow Pass</option>
+                <option value="regural" id="regular"style="display: none;">Regural Pass</option>
+            </select>
+            <div class="arrow">▼</div>
+            <div class="ripple"></div>
+        </div>
+        <div class="animation-effect"></div>
+    </div>
+
+    <script>
+        const selectElement = document.getElementById('passSelect');
+        const rippleEffect = document.querySelector('.ripple');
+
+        selectElement.addEventListener('change', function() {
+            rippleEffect.style.opacity = '1';
+
+            const selectedPass = this.value;
+
+            setTimeout(() => {
+                rippleEffect.style.opacity = '0';
+            }, 100); // Briefly show ripple
+
+            setTimeout(() => {
+                if (selectedPass === 'white') {
+                    window.location.href = './White_Pass.html'; 
+                } else if (selectedPass === 'yellow') {
+                    window.location.href = './Yellow_Pass.html'; 
+                }
+                else if (selectedPass === 'regural') {
+                    window.location.href = './Regural_Pass.html'; 
+                }
+            }, 300); 
+        });
+
+
+     const token=localStorage.getItem("token")
+
+
+
+        async function getStudent() {
+            try {
+                const response = await fetch('http://localhost:5000/yp', {
+                    method: 'GET',
+                    headers: {
+                        Authorization:`Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+                const data=await response.json()
+                if(data.response){
+            console.log(data.response)
+                if(data.response.status=="on"){
+                document.getElementById("yellow").style.display="block"
+                }
+                }
+            }
+            catch(err){
+                 window.location.href="./Login_Page.html"
+                console.log(err)
+               
+            }
+        }
+        getStudent()
+
+
+        async function getWStudent() {
+            try {
+                const response = await fetch('http://localhost:5000/wp', {
+                    method: 'GET',
+                    headers: {
+                        Authorization:`Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+                const data=await response.json()
+                if(data.response){
+            console.log(data.response)
+                if(data.response.status=="on"){
+                document.getElementById("white").style.display="block"
+                }
+                }
+            }
+            catch(err){
+                 window.location.href="./Login_Page.html"
+                console.log(err)
+               
+            }
+        }
+        getWStudent()
+        
+         async function getWStudent() {
+            try {
+                const response = await fetch('http://localhost:5000/wp', {
+                    method: 'GET',
+                    headers: {
+                        Authorization:`Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+                const data=await response.json()
+                if(data.response){
+            console.log(data.response)
+                if(data.response.status=="on"){
+                document.getElementById("white").style.display="block"
+                }
+                }
+            }
+            catch(err){
+                 window.location.href="./Login_Page.html"
+                console.log(err)
+               
+            }
+        }
+        getWStudent()
+
+        async function getRStudent() {
+            try {
+                const response = await fetch('http://localhost:5000/rpss', {
+                    method: 'GET',
+                    headers: {
+                        Authorization:`Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+                const data=await response.json()
+                if(data.response){
+            console.log(data.response)
+                if(data.response.status=="on"){
+                document.getElementById("regular").style.display="block"
+                }
+                }
+            }
+            catch(err){
+                 window.location.href="./Login_Page.html"
+                console.log(err)
+               
+            }
+        }
+        getRStudent()
+    </script>
+         
+</body>
+</html>

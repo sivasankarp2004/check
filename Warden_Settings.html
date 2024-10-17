@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease;
+            animation: fadeInBackground 1s ease-in-out;
+        }
+        .container {
+            width: 90%;
+            max-width: 500px;
+            margin: 10px auto;
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #333;
+            text-align: center;
+            animation: fadeInText 1s ease;
+        }
+        .card {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        .card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .card:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        .card:nth-child(4) {
+            animation-delay: 0.6s;
+        }
+        .card h2 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #555;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        .card h2 img {
+            margin-left: 10px;
+            width: 20px;
+            height: 20px;
+        }
+        .reset-btn {
+            background-color: #f44;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.4s ease;
+            opacity: 0;
+            animation: slideUp 1.2s ease forwards;
+            animation-delay: 0.8s;
+        }
+        .reset-btn:hover {
+            background-color: #d33;
+            transform: scale(1.05);
+        }
+        /* Mobile Styles */
+        @media (max-width: 600px) {
+            body {
+                font-size: 16px;
+            }
+            h1 {
+                font-size: 20px;
+                margin-bottom: 10px;
+            }
+            .container {
+                padding: 10px;
+            }
+            .card {
+                padding: 12px;
+            }
+        }
+        /* Animations */
+        @keyframes fadeInBackground {
+            0% { background-color: #e0e0e0; }
+            100% { background-color: #f7f7f7; }
+        }
+        @keyframes fadeInText {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes slideUp {
+            0% {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .toggle-row {
+            display: flex;
+            justify-content: space-between; /* Aligns items to corners */
+            align-items: center; /* Vertically centers items */
+        }
+        .toggle {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #04ac5d;
+        }
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+        /* Back Button Styles */
+        .back-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin-bottom: 15px;
+        }
+        .back-btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Settings</h1>
+
+     
+        <div class="card" onclick="window.location.href='./warden_profile.html'">
+            <h2 onclick="goToIndex()">My Profile <img src="https://cdn-icons-png.flaticon.com/128/5989/5989619.png" alt="Car"></h2>
+        </div>
+
+        <div class="card" onclick="White()">
+            <h2 onclick="goToIndex()">White Pass <img src="https://cdn-icons-png.flaticon.com/128/3363/3363518.png" alt="Car"></h2>
+        </div>
+
+        <div class="card" onclick="Yellow()">
+            <h2 onclick="goToIndex()">Yellow Pass <img src="https://cdn-icons-png.flaticon.com/128/3363/3363491.png" alt="Car"></h2>
+        </div>
+
+        <div class="card" onclick="Regular()">
+            <h2 onclick="goToIndex()">Regular Pass <img src="https://cdn-icons-png.flaticon.com/128/9121/9121445.png" alt="Car"></h2>
+        </div>
+
+        <div class="card">
+            <div class="toggle-row">
+                <h2 id="toggleHeading">Enable Register Form
+                    <img src="https://cdn-icons-png.flaticon.com/128/16206/16206813.png" alt="Car">
+                </h2>
+                <label class="toggle">
+                    <input type="checkbox" id="allStudents" value="off">
+                    <span class="slider" ></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="card" onclick="window.location.href='./Change_Years.html'">
+            <h2 onclick="goToIndex()">Change Year to Year<img src="https://cdn-icons-png.flaticon.com/128/484/484515.png" alt="Car"></h2>
+        </div>
+
+           <!-- Back Button -->
+           <button class="back-btn" onclick="goToIndex()">Back to Home</button>
+
+
+    <script>
+        const token=localStorage.getItem("token")
+        function goToIndex() {
+            window.location.href = 'Warden_deshboard.html';
+        }
+
+        function resetSettings() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const selects = document.querySelectorAll('select');
+
+            // Reset checkboxes and select options
+            checkboxes.forEach((checkbox) => checkbox.checked = false);
+            selects.forEach((select) => select.selectedIndex = 0);
+        }
+
+        document.getElementById("toggleHeading").addEventListener("click", function() {
+            var checkbox = document.getElementById("allStudents");
+            checkbox.checked = !checkbox.checked;
+        });
+      
+
+        async function getAccess() {
+    
+
+
+    try {
+                const response = await fetch("http://localhost:5000/access", {
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data =await response.json()
+                console.log(data)
+                var checkbox = document.getElementById("allStudents");
+                 if(data.response.status=="on"){
+                    if(!checkbox.checked){
+                        checkbox.checked=!checkbox.checked
+                        return
+                    }
+                 }
+                 else{
+                    checkbox.checked = checkbox.checked;
+                 }
+                
+          
+            }
+    catch(err){
+        console.log(err)
+    }
+    
+    }
+
+    getAccess()
+
+  
+
+
+        async function Access(status){
+        try {
+                const response = await fetch('http://localhost:5000/addAccess', {
+                    method: 'POST',
+                    headers: {
+                        Authorization:`Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({status}),
+                });
+            }
+            catch(err){
+                console.log(err)
+            }
+        }
+
+        document.getElementById("allStudents").addEventListener("click", () => {
+    const checkbox = document.getElementById("allStudents");
+
+    if (checkbox.checked) {
+        checkbox.value = "on";
+        Access("on")
+       
+    } else {
+        checkbox.value = "off";
+        Access("off")
+    }
+});
+
+
+
+   function White(){
+  
+    window.location.href='./Warden_Settings2.html'
+   }
+   function Yellow(){
+
+    window.location.href='./Warden_Settings1.html'
+   }
+   function Regular(){
+
+    window.location.href='./Warden_Settings3.html'
+   }
+
+    </script>
+</body>
+</html>

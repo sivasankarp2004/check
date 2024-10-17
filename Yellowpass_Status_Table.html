@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pass Requests</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #333;
+            display: flex;
+            justify-content: center;
+          
+            height: 100vh;
+            margin: 0;
+            padding: 20px; /* Add padding for better mobile experience */
+            box-sizing: border-box;
+        }
+
+        table {
+            width: 100%;
+            max-width: 90%; /* Restrict table width for mobile */
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            animation: fadeIn 1s ease-out;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            transition: background-color 0.3s ease;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: #49ffdb;
+            color: #fff;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        tr {
+            transition: transform 0.3s ease;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9;
+            transform: scale(1.02);
+        }
+
+        button {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #49ffdb, #37c7aa);
+            border: none;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 25px;
+            transition: background 0.3s ease, transform 0.2s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #37c7aa, #49ffdb);
+            transform: scale(1.1);
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Media query for mobile devices */
+        @media (max-width: 768px) {
+            table {
+                width: 100%;
+                max-width: 100%;
+            }
+
+            th, td {
+                padding: 10px;
+                font-size: 12px; /* Adjust font size for mobile */
+            }
+
+            button {
+                padding: 8px 15px;
+                font-size: 12px; /* Smaller button size on mobile */
+            }
+        }
+
+        /* Media query for very small devices (phones) */
+        @media (max-width: 480px) {
+            th, td {
+                padding: 8px;
+                font-size: 10px;
+            }
+
+            button {
+                padding: 6px 10px;
+                font-size: 10px;
+                border-radius: 20px;
+            }
+
+            table {
+                margin-bottom: 20px; /* Add some space below the table */
+            }
+
+            body {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <table>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Name</th>
+                <th>PassApply Date</th>
+                <th>Pass Status</th>
+                <th>View Pass</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>John Doe</td>
+                <td>2024-10-01</td>
+                <td><span style="color: green; font-weight: bold;">Approved</span></td>
+                <td><button onclick="viewPass('1')">View</button></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Jane Smith</td>
+                <td>2024-09-28</td>
+                <td><span style="color: orange; font-weight: bold;">Pending</span></td>
+                <td><button onclick="viewPass('2')">View</button></td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Michael Johnson</td>
+                <td>2024-09-25</td>
+                <td><span style="color: red; font-weight: bold;">Rejected</span></td>
+                <td><button onclick="viewPass('3')">View</button></td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>Emily Davis</td>
+                <td>2024-09-20</td>
+                <td><span style="color: green; font-weight: bold;">Approved</span></td>
+                <td><button onclick="viewPass('4')">View</button></td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>Daniel Williams</td>
+                <td>2024-09-18</td>
+                <td><span style="color: orange; font-weight: bold;">Pending</span></td>
+                <td><button onclick="viewPass('5')">View</button></td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>Emma Brown</td>
+                <td>2024-09-15</td>
+                <td><span style="color: green; font-weight: bold;">Approved</span></td>
+                <td><button onclick="viewPass('6')">View</button></td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>Olivia Wilson</td>
+                <td>2024-09-10</td>
+                <td><span style="color: red; font-weight: bold;">Rejected</span></td>
+                <td><button onclick="viewPass('7')">View</button></td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>James Martinez</td>
+                <td>2024-09-08</td>
+                <td><span style="color: green; font-weight: bold;">Approved</span></td>
+                <td><button onclick="viewPass('8')">View</button></td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td>Ava Anderson</td>
+                <td>2024-09-05</td>
+                <td><span style="color: orange; font-weight: bold;">Pending</span></td>
+                <td><button onclick="viewPass('9')">View</button></td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>Liam Taylor</td>
+                <td>2024-09-01</td>
+                <td><span style="color: green; font-weight: bold;">Approved</span></td>
+                <td><button onclick="viewPass('10')">View</button></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        function viewPass(passId) {
+            // Simulate pass viewing with a popup message
+            alert("don't Generate The Your Pass. Please Wait Or Cantact the warden");
+        }
+    </script>
+
+</body>
+</html>

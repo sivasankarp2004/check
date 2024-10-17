@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registeration Successful</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #49ffdb, #1a73e8);
+      background-size: 300% 300%;
+      animation: bgShift 8s ease-in-out infinite;
+      overflow: hidden;
+    }
+
+    .container {
+      background-color: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      animation: fadeIn 1.5s ease-out, floatEffect 6s ease-in-out infinite;
+      max-width: 450px;
+      width: 100%;
+      position: relative;
+      z-index: 2;
+    }
+
+    h2 {
+      font-size: 30px;
+      color: #333;
+      margin-bottom: 20px;
+      animation: slideIn 1.5s ease-out;
+      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    p {
+      font-size: 18px;
+      color: green;
+      animation: slideUp 1.5s ease-out;
+      margin-bottom: 30px;
+    }
+
+    .success-icon {
+      font-size: 60px;
+      color: #28a745;
+      margin-bottom: 20px;
+      animation: popIn 1.2s ease-in-out, floating 4s ease-in-out infinite;
+    }
+
+    .login-button {
+      padding: 10px 20px;
+      background-color: #49ffdb;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 20px;
+    }
+
+    .login-button:hover {
+      background-color: #1a73e8;
+      transform: scale(1.05);
+    }
+
+    .declaration {
+      font-size: 16px;
+      color: #555;
+      animation: fadeInText 2s ease-out;
+      margin-top: 20px;
+    }
+
+    .sparkles {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .sparkles div {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 50%;
+      animation: sparkle 4s linear infinite;
+      animation-delay: calc(0.5s * var(--i));
+    }
+
+    @keyframes sparkle {
+      0% {
+        transform: translateY(-10px) scale(0.2);
+        opacity: 0;
+      }
+      50% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(10px) scale(0.2);
+        opacity: 0;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes fadeInText {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes popIn {
+      0% {
+        transform: scale(0);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes floating {
+      0% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes floatEffect {
+      0% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-5px);
+      }
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes bgShift {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+  </style>
+  <script>
+    // Redirect function for login button
+    function redirectToIndex() {
+      window.location.href = "Login_Page.html";
+    }
+
+    // Automatic redirect after 3 seconds
+    setTimeout(function() {
+      window.location.href = "Login_Page.html";
+    }, 5000);
+  </script>
+</head>
+<body>
+
+  <div class="container">
+    <div class="success-icon">✔</div>
+    <h2>Registeration Successful</h2>
+    <p>Thank you! Your form has been successfully Registered.</p>
+    <button class="login-button" onclick="redirectToIndex()">Login</button>
+  </div>
+
+  <div class="sparkles">
+    <!-- Sparkle animations -->
+    <div style="--i:1;"></div>
+    <div style="--i:2;"></div>
+    <div style="--i:3;"></div>
+    <div style="--i:4;"></div>
+    <div style="--i:5;"></div>
+  </div>
+
+</body>
+</html>

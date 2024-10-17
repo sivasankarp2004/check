@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mechanic Search</title>
+    <style>
+        /* Styles copied from your code */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f2f6ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+        }
+
+        .header input {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 25px;
+            border: 2px solid #ddd;
+            outline: none;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .header input:focus {
+            border-color: #4285f4;
+        }
+
+        .mechanics-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+        }
+
+        .mechanic {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 300px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .mechanic:hover {
+            transform: scale(1.05);
+        }
+
+        .mechanic img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 15px;
+        }
+
+        .mechanic-info h5 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .mechanic-info p {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .view-more-button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            margin-top: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .view-more-button:hover {
+            background-color: #218838;
+        }
+
+        /* Mobile Styles */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header input {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .mechanic img {
+                width: 80px;
+                height: 80px;
+            }
+
+            .mechanic-info h5 {
+                font-size: 16px;
+            }
+
+            .mechanic-info p {
+                font-size: 14px;
+            }
+
+            .view-more-button {
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+
+            .mechanics-list {
+                justify-content: center;
+            }
+        }
+
+        /* Desktop Styles */
+        @media (min-width: 769px) {
+            .header input {
+                width: 85%;
+            }
+
+            .mechanics-list {
+                justify-content: space-between;
+            }
+
+            .mechanic {
+                width: 22%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <input type="text" id="searchInput" placeholder="Search Student Name or Register no" onkeyup="searchMechanic()">
+        </div>
+
+        <div class="mechanics-list" id="mechanicsList"></div>
+    </div>
+
+    <script>
+        const token = localStorage.getItem("token");
+
+        async function getStudents() {
+            try {
+                const response = await fetch("http://localhost:5000/students", {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const students = await response.json();
+                console.log(students)
+                displayStudents(students);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+
+        function displayStudents(students) {
+            const mechanicsList = document.getElementById('mechanicsList');
+            mechanicsList.innerHTML = ''; // Clear existing content
+
+            students.forEach(student => {
+                const mechanicDiv = document.createElement('div');
+                mechanicDiv.classList.add('mechanic');
+                mechanicDiv.setAttribute('data-name', student.name);
+                mechanicDiv.setAttribute('data-register', student.regNo);
+
+                mechanicDiv.innerHTML = `
+                   <img src="${student.photo}" alt="Profile Photo">
+                    <div class="mechanic-info">
+                        <h5>${student.name}</h5>
+                        <p>${student.regNo}</p>
+                    </div>
+                    <button class="view-more-button">View More</button>
+                `;
+
+                mechanicDiv.querySelector('.view-more-button').addEventListener('click', function() {
+                    localStorage.setItem("id",student._id)
+                    window.location.href = 'Editstudentdetails.html';
+                });
+
+                mechanicsList.appendChild(mechanicDiv);
+            });
+        }
+
+        function searchMechanic() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let mechanics = document.getElementsByClassName('mechanic');
+
+            Array.from(mechanics).forEach(function(mechanic) {
+                let name = mechanic.getAttribute('data-name').toLowerCase();
+                let register = mechanic.getAttribute('data-register').toLowerCase();
+
+                if (name.includes(input) || register.includes(input)) {
+                    mechanic.style.display = 'block';
+                } else {
+                    mechanic.style.display = 'none';
+                }
+            });
+        }
+
+        getStudents();
+    </script>
+
+</body>
+</html>

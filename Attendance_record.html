@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students Attendance</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #e0f7fa, #80deea, #49ffdb);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .dashboard {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            animation: fadeIn 1.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .stat-box {
+            flex: 1;
+            margin: 10px;
+            padding: 20px;
+            background: linear-gradient(135deg, #49ffdb, #40e0d0);
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            color: #fff;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            animation: bounceIn 1s ease;
+            position: relative;
+        }
+
+        @keyframes bounceIn {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+
+        .stat-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            animation: glow 1.5s infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 10px rgba(73, 255, 219, 0.5); }
+            to { box-shadow: 0 0 20px rgba(73, 255, 219, 0.9); }
+        }
+
+        .stat-box h2 {
+            margin: 0;
+            font-size: 36px;
+        }
+
+        .stat-box p {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+
+        .attendance-section {
+            margin-top: 20px;
+        }
+
+        .attendance-table {
+            width: 100%;
+            border-collapse: collapse;
+            animation: fadeIn 2s ease;
+        }
+
+        .attendance-table th, .attendance-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .attendance-table th {
+            background: #49ffdb;
+            color: #fff;
+            animation: slideIn 1.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .attendance-table tbody tr {
+            opacity: 0;
+            animation: fadeRowIn 0.5s ease forwards;
+        }
+
+        .attendance-table tbody tr:nth-child(1) { animation-delay: 0.3s; }
+        .attendance-table tbody tr:nth-child(2) { animation-delay: 0.6s; }
+        .attendance-table tbody tr:nth-child(3) { animation-delay: 0.9s; }
+        /* Add more delays for additional rows */
+
+        @keyframes fadeRowIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .attendance-table tbody tr:hover {
+            background: #f1f1f1;
+            animation: pulse 0.5s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.02); }
+        }
+
+        .status-present {
+            color: green;
+            font-weight: bold;
+        }
+
+        .status-absent {
+            color: red;
+            font-weight: bold;
+        }
+
+        /* Mobile Styles */
+        @media (max-width: 768px) {
+            .stats {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .stat-box {
+                width: 80%;
+                margin: 15px 0;
+            }
+
+            .attendance-table th, .attendance-table td {
+                padding: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stat-box h2 {
+                font-size: 28px;
+            }
+
+            .stat-box p {
+                font-size: 16px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <h1>Students Attendance</h1>
+        <div class="stats">
+            <div class="stat-box">
+                <h2 id="totalStudents">0</h2>
+                <p>Total Students</p>
+            </div>
+            <div class="stat-box">
+                <h2 id="presentStudents">0</h2>
+                <p>Students Present</p>
+            </div>
+            <div class="stat-box">
+                <h2 id="absentStudents">0</h2>
+                <p>Students Absent</p>
+            </div>
+        </div>
+
+        <div class="attendance-section">
+            <h2>Biometric Attendance Records</h2>
+            <table class="attendance-table">
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Register No</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>John Doe</td>
+                        <td>12345</td>
+                        <td class="status-present">&#x2714; Present</td> <!-- Checkmark symbol -->
+                    </tr>
+                    <tr>
+                        <td>Jane Smith</td>
+                        <td>12346</td>
+                        <td class="status-absent">&#x2716; Absent</td> <!-- Cross symbol -->
+                    </tr>
+                    <tr>
+                        <td>Michael Johnson</td>
+                        <td>12347</td>
+                        <td class="status-present">&#x2714; Present</td> <!-- Checkmark symbol -->
+                    </tr>
+                    <!-- Add more student rows as needed -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const totalStudents = 0;
+        const presentStudents = 0;
+        const absentStudents = totalStudents - presentStudents;
+
+        document.getElementById('totalStudents').textContent = totalStudents;
+        document.getElementById('presentStudents').textContent = presentStudents;
+        document.getElementById('absentStudents').textContent = absentStudents;
+    </script>
+</body>
+</html>

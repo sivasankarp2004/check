@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Year Options</title>
+    <style>
+        /* Background Animation */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            background-size: 200% 200%;
+            animation: gradientBackground 10s ease infinite;
+            overflow: hidden;
+        }
+
+        @keyframes gradientBackground {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Neon Heading */
+        h2 {
+            color: #00ffcc;
+          
+            margin-bottom: 20px;
+        }
+
+        @keyframes neonGlow {
+            from {
+                text-shadow: 0 0 5px #00ffcc, 0 0 10px #00ffcc, 0 0 15px #00ffcc, 0 0 20px #00ffcc;
+            }
+            to {
+                text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc, 0 0 30px #00ffcc, 0 0 40px #00ffcc;
+            }
+        }
+
+        /* Year Display with Bounce */
+        #yearDisplay {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #ffffff;
+            opacity: 1;
+            margin-bottom: 30px;
+            animation: bounceIn 1s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Select Dropdowns */
+        select {
+            padding: 10px;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            border: 2px solid #00ffcc;
+            border-radius: 8px;
+            background-color: #001f3f;
+            color: #ffffff;
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+        }
+
+        select:hover {
+            box-shadow: 0 0 15px #00ffcc;
+        
+        }
+
+        /* Button with Glowing Effect */
+        button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border: none;
+            background-color: #00ffcc;
+            color: #001f3f;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 0 10px #00ffcc;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background-color: rgba(255, 255, 255, 0.2);
+            transition: width 0.3s ease, height 0.3s ease, top 0.3s ease, left 0.3s ease;
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        button:hover::before {
+            width: 0;
+            height: 0;
+            top: 50%;
+            left: 50%;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+           
+        }
+
+        /* Floating Particle Effects */
+        @keyframes floatParticles {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-100vh); }
+        }
+
+        .particle {
+            position: absolute;
+            bottom: -50px;
+            width: 15px;
+            height: 15px;
+            background-color: rgba(0, 255, 204, 0.8);
+            border-radius: 50%;
+            animation: floatParticles 15s linear infinite;
+            opacity: 0.7;
+        }
+
+        .particle:nth-child(1) {
+            left: 15%;
+            animation-duration: 6s;
+            animation-delay: 1s;
+            width: 10px; /* Randomize sizes */
+            height: 10px;
+        }
+
+        .particle:nth-child(2) {
+            left: 30%;
+            animation-duration: 8s;
+            animation-delay: 2s;
+            width: 12px;
+            height: 12px;
+        }
+
+        .particle:nth-child(3) {
+            left: 50%;
+            animation-duration: 5s;
+            animation-delay: 3s;
+            width: 15px;
+            height: 15px;
+        }
+
+        .particle:nth-child(4) {
+            left: 70%;
+            animation-duration: 10s;
+            animation-delay: 4s;
+            width: 8px;
+            height: 8px;
+        }
+
+        .particle:nth-child(5) {
+            left: 85%;
+            animation-duration: 7s;
+            animation-delay: 2.5s;
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 10px;
+            box-shadow: 0 0 20px #00ffcc;
+            text-align: center;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        @media (max-width: 600px) {
+            /* Responsive adjustments */
+            h2 {
+                font-size: 2rem;
+            }
+
+            #yearDisplay {
+                font-size: 2.5rem;
+            }
+
+            select, button {
+                width: 100%;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Change the Students Course Years</h2>
+
+    <h2>Current Year</h2>
+    <select id="currentYearSelect">
+        <option value="1st Year">1st Year</option>
+    </select>
+
+    <h2>Changing Year</h2>
+    <select id="changeYearSelect">
+        <option value="2nd Year" selected>2nd Year</option>
+    </select>
+    <div id="yearDisplay" class="slide-in">1st Year ➜ 2nd Year</div>
+
+
+    <button onclick="openModal()">Change Year</button>
+
+    <!-- Placeholder to display the selected year -->
+    <div id="yearDisplay" class="slide-in"></div>
+
+    <!-- Modal for confirmation -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <p>Are you sure you want to change from <span id="currentYear">1st Year</span> to <span id="newYear">2nd Year</span>?</p>
+            <button onclick="confirmChange()">Confirm</button>
+        </div>
+    </div>
+
+    <!-- Floating Particles -->
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+
+    <script>
+        // Open modal with confirmation details
+        function openModal() {
+            const currentYear = "1st Year";
+            const changeYear = "2nd Year";
+
+            document.getElementById("currentYear").innerText = currentYear;
+            document.getElementById("newYear").innerText = changeYear;
+
+            const modal = document.getElementById("myModal");
+            modal.style.display = "block";
+        }
+
+        // Close modal
+        function closeModal() {
+            const modal = document.getElementById("myModal");
+            modal.style.display = "none";
+        }
+
+        // Confirm change action
+        function confirmChange() {
+            alert(`Year changed successfully from 1st Year to 2nd Year.`);
+            closeModal();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard & Profile</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fa;
+            transition: background-color 0.3s ease;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(45deg, #15716f, #0a5856);
+            color: white;
+            padding: 15px 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .profile-photo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .profile-photo:hover {
+            transform: scale(1.1);
+        }
+
+        .notification-icon, .back-icon, .edit-icon {
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .notification-icon:hover, .back-icon:hover, .edit-icon:hover {
+            transform: rotate(15deg);
+        }
+
+        /* Dashboard Styling */
+        .dashboard {
+            text-align: center;
+            padding: 20px;
+        }
+
+/* Profile Card Styling */
+.profile-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%); /* Subtle gradient */
+    border-radius: 15px; /* Rounded corners */
+    padding: 30px; /* Inner padding */
+    margin: 20px auto; /* Center alignment */
+    width: 90%; /* Responsive width */
+    max-width: 400px; /* Limit width for better design */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    text-align: center; /* Centered text */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; /* Animation on hover */
+    position: relative; /* For pseudo-element positioning */
+    overflow: hidden; /* Clip overflow for the pseudo-element */
+}
+
+/* Adding hover effect */
+.profile-card:hover {
+    transform: translateY(-10px); /* Lift on hover */
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2); /* Darker shadow on hover */
+}
+
+/* Decorative border effect on hover */
+.profile-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 15px; /* Match border radius */
+    border: 4px solid transparent; /* Invisible border */
+    transition: border-color 0.3s ease; /* Smooth border transition */
+}
+
+.profile-card:hover::before {
+    border-color: rgba(0, 123, 255, 0.7); /* Blue border on hover */
+}
+
+/* Profile Image Styling */
+.profile-img {
+    width: 80px; /* Set width for profile image */
+    height: 80px; /* Set height for profile image */
+    border-radius: 50%; /* Circular image */
+    margin-bottom: 10px; /* Space below image */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Image animation */
+}
+
+.profile-img:hover {
+    transform: scale(1.1) rotate(5deg); /* Scale and rotate image on hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Enhance shadow on hover */
+}
+
+/* Name and Register No Styles */
+#profile-name {
+    font-size: 1.5rem; /* Larger font size for name */
+    color: #333; /* Dark text color */
+    margin: 10px 0; /* Margin above and below */
+    animation: fadeIn 0.5s ease; /* Fade-in effect */
+    transition: color 0.3s ease; /* Text color transition */
+}
+
+.profile-card:hover #profile-name {
+    color: rgba(0, 123, 255, 0.8); /* Change color on hover */
+}
+
+/* Register number font size */
+#profile-regno {
+    font-size: 1rem; /* Register number font size */
+    color: #555; /* Slightly lighter color */
+    margin: 5px 0; /* Margin around register number */
+    animation: fadeIn 0.5s ease 0.1s; /* Fade-in effect with delay */
+}
+
+/* Course and Year Styling */
+#profile-course, #profile-courseyear {
+    font-size: 0.9rem; /* Smaller font size */
+    color: #777; /* Lighter color for course/year */
+    margin: 5px 0; /* Space around */
+    animation: fadeIn 0.5s ease 0.2s; /* Fade-in effect with delay */
+}
+
+/* Icons */
+.course-icon, .year-icon {
+    font-size: 1.2rem; /* Icon size */
+    color: rgba(0, 123, 255, 0.6); /* Icon color */
+    margin-right: 5px; /* Space between icon and text */
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Additional hover effects for text */
+.profile-card:hover #profile-course,
+.profile-card:hover #profile-courseyear {
+    color: rgba(0, 123, 255, 0.6); /* Change color on hover */
+    transition: color 0.3s ease; /* Smooth color transition */
+}
+
+/* Button Styles */
+.profile-button {
+    display: inline-block; /* Inline block for buttons */
+    padding: 10px 20px; /* Padding */
+    background-color: #007bff; /* Button background */
+    color: #ffffff; /* Button text color */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor */
+    font-size: 1rem; /* Font size */
+    margin-top: 15px; /* Space above button */
+    text-decoration: none; /* Remove underline */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Transition effects */
+}
+
+.profile-button:hover {
+    background-color: rgba(0, 123, 255, 0.8); /* Darken button on hover */
+    transform: translateY(-2px); /* Lift button on hover */
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .profile-card {
+        padding: 20px; /* Adjust padding */
+    }
+
+    .profile-img {
+        width: 60px; /* Smaller image on mobile */
+        height: 60px; /* Smaller image on mobile */
+    }
+
+    #profile-name {
+        font-size: 1.3rem; /* Adjust name size */
+    }
+
+    #profile-regno,
+    #profile-course,
+    #profile-courseyear {
+        font-size: 0.8rem; /* Adjust font size for smaller screens */
+    }
+}
+
+/* Profile Image Styling */
+.profile-img {
+    width: 80px; /* Set width for profile image */
+    height: 80px; /* Set height for profile image */
+    border-radius: 50%; /* Circular image */
+    margin-bottom: 10px; /* Space below image */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
+    transition: transform 0.3s ease; /* Image animation */
+}
+
+.profile-img:hover {
+    transform: scale(1.1); /* Scale image on hover */
+}
+
+/* Name and Register No Styles */
+#profile-name {
+    font-size: 1.5rem; /* Larger font size for name */
+    color: #333; /* Dark text color */
+    margin: 10px 0; /* Margin above and below */
+    animation: fadeIn 0.5s ease; /* Fade-in effect */
+}
+
+/* Register number font size */
+#profile-regno {
+    font-size: 1rem; /* Register number font size */
+    color: #555; /* Slightly lighter color */
+    margin: 5px 0; /* Margin around register number */
+    animation: fadeIn 0.5s ease 0.1s; /* Fade-in effect with delay */
+}
+
+/* Course and Year Styling */
+#profile-course, #profile-courseyear {
+    font-size: 0.9rem; /* Smaller font size */
+    color: #777; /* Lighter color for course/year */
+    margin: 5px 0; /* Space around */
+    animation: fadeIn 0.5s ease 0.2s; /* Fade-in effect with delay */
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+        .profile-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px;
+        }
+
+        .dashboard-item {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .dashboard-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .dashboard-item img {
+            width: 50px;
+            height: 50px;
+            transition: transform 0.3s ease;
+        }
+
+        .dashboard-item:hover img {
+            transform: scale(1.2);
+        }
+
+        .dashboard-item p {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        /* Profile Page Styling */
+        .profile-page {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .profile-card .description {
+            font-size: 14px;
+            color: gray;
+            margin: 10px 0;
+        }
+
+        .contact-info {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px auto;
+            width: 90%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            text-align: left;
+        }
+
+        .contact-info:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .contact-info h3 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .profile-options {
+            margin: 20px;
+        }
+
+        .profile-btn {
+            background-color: #0056ff;
+            color: white;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 50px;
+            margin: 10px auto;
+            cursor: pointer;
+            width: 80%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .profile-btn:hover {
+            background-color: #003bb5;
+            transform: scale(1.05);
+        }
+
+        .profile-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Sleek Modern Table Styling */
+        table {
+    width: 100%;
+    border-spacing: 0 10px;
+    border-collapse: separate;
+    margin: 20px 0;
+}
+
+table tr {
+    background: #ffffff;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease;
+}
+
+table tr:hover {
+    transform: scale(1.02);
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+table td {
+    padding: 15px 20px;
+    border: none;
+    text-align: left;
+    position: relative;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+table td:first-child {
+    font-weight: 600;
+    color: #333;
+}
+
+table td:last-child {
+    text-align: right;
+}
+
+/* Add a hover effect on the first cell */
+table td:first-child:hover {
+    color: #007BFF;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 3px rgba(0, 123, 255, 0.5);
+}
+
+/* Add a subtle glow effect to even rows */
+table tr:nth-child(even) {
+    background-color: #f7f9fc;
+}
+
+table tr:nth-child(odd) {
+    background-color: #eef2f9;
+}
+
+table tr:hover td {
+    background: linear-gradient(90deg, rgba(0,123,255,0.1) 0%, rgba(255,255,255,1) 100%);
+}
+
+/* Adding an icon on hover to the last column */
+table td:last-child::after {
+    content: '🔗'; /* Unicode for FontAwesome right arrow */
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    opacity: 0;
+    margin-left: 10px;
+    transition: opacity 0.3s ease-in-out;
+}
+
+table tr:hover td:last-child::after {
+    opacity: 1;
+}
+
+/* Mobile View Enhancements */
+@media (max-width: 768px) {
+    table, table tr, table td {
+        display: block;
+        width: 100%;
+    }
+
+    table tr {
+        margin-bottom: 10px;
+        padding: 10px;
+        background-color: #ffffff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        overflow: hidden;
+        transform: scale(1);
+        transition: all 0.2s ease-in-out;
+    }
+
+    table td {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 15px;
+        font-size: 0.9rem;
+        border-bottom: none;
+        background-color: #f9f9f9;
+        position: relative;
+        transition: background-color 0.3s ease-in-out;
+    }
+
+    table td:before {
+        content: attr(data-label);
+        font-weight: bold;
+        text-transform: uppercase;
+        color: #555;
+        margin-right: 10px;
+    }
+
+    table td:last-child {
+        text-align: right;
+        color: #007BFF;
+    }
+
+    table tr:hover td:last-child::after {
+        opacity: 0;
+    }
+}
+
+/* Extra Adjustments for Small Devices (Less than 480px wide) */
+@media (max-width: 480px) {
+    table td {
+        padding: 8px 10px;
+        font-size: 0.85rem;
+    }
+
+    table td:before {
+        font-size: 0.75rem;
+    }
+}
+
+/* Add Fade-in Animation */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+table {
+    opacity: 0;
+    animation: fadeIn 0.6s ease-in-out forwards;
+}
+
+
+        /* Keyframes for animations */
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounceIn {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-30px);
+            }
+            60% {
+                transform: translateY(-15px);
+            }
+        }
+
+        /* Apply animations */
+        .dashboard-item, .profile-card, .contact-info, .profile-btn {
+            animation: fadeInUp 0.8s ease both;
+        }
+
+        .profile-img {
+            animation: bounceIn 1.2s ease both;
+        }
+        #prof{
+            width:70px;
+            height: 70px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Dashboard Section -->
+    <div class="dashboard">
+        <header>
+            <img src="https://via.placeholder.com/40" alt="Profile Photo" onclick="Profile()" class="profile-photo" id="profile">
+            <h1>DASHBOARD</h1>
+            <div class="notification-icon">&#128276;</div>
+        </header>
+        <!-- <div class="profile-card">
+            <img src="https://via.placeholder.com/80" alt="Profile Image" class="profile-img">
+            <h2>NAME</h2>
+            <p>REGISTER NO</p>
+        </div> -->
+        <div class="dashboard-grid">
+            <div class="dashboard-item" onclick="OutPass()">
+                <img src="https://cdn-icons-png.flaticon.com/128/1056/1056488.png" alt="Pass Request">
+                <p>Pass Requests</p>
+            </div>
+            <div class="dashboard-item" onclick="window.location.href='./Pass_Status_Button.html'">
+                <img src="https://cdn-icons-png.flaticon.com/128/1162/1162914.png" alt="Fees">
+                <p>Pass Status</p>
+            </div>
+            <div class="dashboard-item" onclick="window.location.href='./Hostel_fees_bill_Register.html'">
+                <img src="https://cdn-icons-png.flaticon.com/128/10496/10496514.png" alt="Home Work">
+                <p>Fees</p>
+            </div>
+            <div class="dashboard-item" onclick="window.location.href='./Get_Information_Students.html'">
+                <img src="https://cdn-icons-png.flaticon.com/128/4727/4727424.png" alt="Status">
+                <p>Informations</p>
+            </div>
+            <div class="dashboard-item" onclick="alert('This feature is coming soon')">
+                <img src="https://cdn-icons-png.flaticon.com/128/13630/13630891.png" alt="Status">
+                <p>Biometric Attendance</p>
+            </div>            
+            <div class="dashboard-item" onclick="window.location.href='./History.html'">
+                <img src="https://cdn-icons-png.flaticon.com/128/1373/1373354.png" alt="Status">
+                <p>History</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Section -->
+    <div class="profile-page">
+        <header>
+            <div class="back-icon"></div>
+            <h1>PROFILE</h1>
+            <div class="edit-icon"></div>
+        </header>
+
+        <div class="profile-card">
+           <img src="https://via.placeholder.com/80" alt="Profile Image" class="profile-img" id="prof">
+          <br>
+           <h2 id="profile-name" style="font-size: 24px; color: #ffffff; background-color: #24889f; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin: 10px 0; text-align: center;"></h2>
+            
+           <button> <p id="profile-courseyear" ></p>
+            <p id="profile-regno">REGISTER NO</p>
+            <p id="profile-course"></p>
+           </button>
+        </div>  
+
+        <div class="contact-info">
+            <h3>Contact Details</h3>
+            <table id="contact-details-table">
+                <!-- Contact details will be inserted here -->
+            </table>
+        </div>
+        <div class="contact-info">
+            <h3>Parent's Details</h3>
+            <table id="parent-details-table">
+                <!-- Parent's details will be inserted here -->
+            </table>
+        </div>
+        <div class="contact-info">
+            <h3>Bank Account Details</h3>
+            <table id="bank-details-table">
+                <!-- Bank account details will be inserted here -->
+            </table>
+        </div>
+        <div class="profile-options">
+            <button class="profile-btn" onclick="Logout()">Log Out</button>
+        </div>
+    </div>
+
+   <script>
+    const token = localStorage.getItem("token");
+   
+    function OutPass(){
+        window.location.href="./Pass_Type.html"
+    }
+
+    function Profile(){
+        window.location.href="./profile-details.html"
+    }
+    function Logout(){
+        localStorage.removeItem("token");
+        window.location.href = "./Login_Page.html";
+    }
+
+    async function details() {
+        try {
+            const response = await fetch("http://localhost:5000/student", {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await response.json();
+            // Mapping the fetched data into the profile section dynamically
+            document.getElementById('profile-name').textContent = data.name;
+            document.getElementById('profile-regno').textContent = `REGISTER NO: ${data.regNo}`;
+            document.getElementById('profile-course').innerHTML = `<strong>Course:</strong> ${data.course}`;
+            document.getElementById('profile-courseyear').innerHTML = `<strong>Course Year:</strong> ${data.courseYear}`;
+
+            // Mapping contact details
+            const contactDetailsTable = document.getElementById('contact-details-table');
+            contactDetailsTable.innerHTML = `
+                <tr>
+                    <td><strong>Phone:</strong></td>
+                    <td>${data.studentPhone}</td>
+                </tr>
+                <tr>
+                    <td><strong>Email:</strong></td>
+                    <td>${data.studentEmail}</td>
+                </tr>
+                <tr>
+                    <td><strong>DOB:</strong></td>
+                    <td>${new Date(data.dob).toLocaleDateString()}</td>
+                </tr>
+               <tr>
+    <td><strong>Gender</strong></td>
+    <td>${data.gender}</td> <!-- Correctly display the gender value -->
+</tr>
+
+                <tr>
+                    <td><strong>Address:</strong></td>
+                    <td>${data.address}</td>
+                </tr>
+                <tr>
+                    <td><strong>Native Place:</strong></td>
+                    <td>${data.nativePlace}</td>
+                </tr>
+                <tr>
+                    <td><strong>Room No:</strong></td>
+                    <td>${data.roomNo}</td>
+                </tr>
+                <tr>
+                    <td><strong>Religion:</strong></td>
+                    <td>${data.religion}</td>
+                </tr>
+                <tr>
+                    <td><strong>Caste:</strong></td>
+                    <td>${data.caste}</td>
+                </tr>
+                <tr>
+                    <td><strong>Nationality:</strong></td>
+                    <td>${data.nationality}</td>
+                </tr>
+                <tr>
+                    <td><strong>Blood Group:</strong></td>
+                    <td>${data.bloodgroup}</td>
+                </tr>
+            `;
+
+            // Mapping parent's details
+            const parentDetailsTable = document.getElementById('parent-details-table');
+            parentDetailsTable.innerHTML = `
+                <tr>
+                    <td><strong>Mother's Name:</strong></td>
+                    <td>${data.motherName}</td>
+                </tr>
+                <tr>
+                    <td><strong>Father's Name:</strong></td>
+                    <td>${data.fatherName}</td>
+                </tr>
+                <tr>
+                    <td><strong>Parents Phone:</strong></td>
+                    <td>${data.parentsno}</td>
+                </tr>
+            `;
+
+            // Mapping bank account details
+            const bankDetailsTable = document.getElementById('bank-details-table');
+            bankDetailsTable.innerHTML = `
+                <tr>
+                    <td><strong>Account No:</strong></td>
+                    <td>${data.accountNo}</td>
+                </tr>
+                <tr>
+                    <td><strong>Account Holder:</strong></td>
+                    <td>${data.accountHolder}</td>
+                </tr>
+                <tr>
+                    <td><strong>IFSC:</strong></td>
+                    <td>${data.ifsc}</td>
+                </tr>
+                <tr>
+                    <td><strong>Branch:</strong></td>
+                    <td>${data.branch}</td>
+                </tr>
+            `;
+            const profile = document.getElementById("profile").src = `${data.photo}`
+            const prof = document.getElementById("prof").src = `${data.photo}`
+            console.log(data.photo)
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    details();
+    // async function Update(){
+    //   try{
+    //     const response = await fetch("http://localhost:5000/students", {
+    //                 method: "PUT",
+    //                 headers: {
+    //                     Authorization: `Bearer ${token}`,
+    //                     'Content-Type': 'application/json'
+    //                 },
+    //                 body: JSON.stringify({ studentPhone:"checking", address:"checking",course:"checking" }),
+    //             });
+    //         const data=await response.json()
+    //         console.log(data)
+
+    //         }
+    //         catch(err){
+    //             console.log(err)
+    //         }
+    //     }
+    //     Update()
+
+    // Dashboard item click event
+    document.querySelectorAll('.dashboard-item').forEach(item => {
+        item.addEventListener('click', () => {
+            // alert('Feature coming soon!');
+        });
+    });
+
+    // Edit icon click event
+    document.querySelector('.edit-icon').addEventListener('click', () => {
+        alert('Edit all profile details feature coming soon!');
+    });
+
+
+
+    
+  function checkToken() {
+      const token = localStorage.getItem('token'); // Retrieve token from localStorage
+
+      // If there's no token, redirect to the login page
+      if (!token) {
+        window.location.href = 'Login_Page.html'; // Replace with your actual login page URL
+      }
+    }
+
+    // Call the function to check token when the page loads
+    window.onload = checkToken;
+</script>
+</body>
+</html>

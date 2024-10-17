@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pass Requests</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background-color: #f7f7f7;
+    }
+
+    h1 {
+      font-size: 32px;
+      color: #2b3d52;
+      font-weight: 700;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding: 10px 0;
+      border-bottom: 3px solid #4caf50;
+      margin-bottom: 30px;
+    }
+
+    .dashboard {
+      padding: 20px;
+    }
+
+    .server-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .server-card {
+      border-radius: 12px;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      width: 300px;
+      background-color: #fff59b;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .card-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .server-card img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .server-card h3 {
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+
+    .server-card p {
+      font-size: 12px;
+      color: #555;
+    }
+
+    .server-card:hover {
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transform: scale(1.02);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .online, .offline {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 4px 8px;
+      font-size: 10px;
+      color: white;
+      border-radius: 10px;
+    }
+
+    .online {
+      background-color: #4caf50;
+    }
+
+    .offline {
+      background-color: #f44336;
+    }
+
+    .card-buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 50px;
+    }
+
+    .card-buttons button {
+      width: 60px;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 0;
+      font-size: 12px;
+      cursor: pointer;
+      color: white;
+      background-color: #333;
+      transition: background-color 0.3s ease;
+    }
+
+    .card-buttons button.Accepted {
+      background-color: #0cce74;
+    }
+
+    .card-buttons button.CallParents {
+      background-color: #044ae0;
+    }
+
+    .card-buttons button.Rejected {
+      background-color: #ce0e00;
+    }
+
+    .card-buttons button:hover {
+      opacity: 0.9;
+    }
+
+    .year-button {
+      background-color: #49ffdb;
+      border: none;
+      border-radius: 8px;
+      padding: 5px 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .year-button h5 {
+      margin: 0;
+      font-size: 13px;
+      color: #333;
+    }
+
+    .year-button:hover {
+      background-color: #3ae0c7;
+    }
+
+    @media (max-width: 600px) {
+      .server-grid {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .server-card {
+        width: 100%;
+        max-width: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <h1>Pass Requests</h1>
+    <div class="server-grid" id="pass-requests-container">
+      <!-- Cards will be dynamically injected here -->
+    </div>
+  </div>
+
+  <script>
+    const token=localStorage.getItem("token")
+    // Fetch data from the backend
+    async function fetchPassRequests() {
+                const response = await fetch("http://localhost:5000/getPass", {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    
+        const data = await response.json();
+        console.log(data)
+        const passRequests=data.response
+
+        const container = document.getElementById('pass-requests-container');
+        container.innerHTML = ''; // Clear existing content
+
+        passRequests.forEach(request => {
+          const card = document.createElement('div');
+          card.classList.add('server-card');
+
+          card.innerHTML = `
+            <div class="card-info">
+              <img src="https://cdn-icons-png.flaticon.com/128/14465/14465270.png" alt="User Image">
+              <div>
+                <h3>${request.name}</h3>
+                <p>${request.regNo}</p>
+                <p>Room no: <span style="font-weight: bold; color: #ed0505;">${request.roomNo}</span></p>
+                <button class="year-button"><h5>${request.year} Year</h5></button>
+              </div>
+            </div>
+            <h6>Department: <span style="font-weight: bold; color: #ed0505;">${request.department}</span></h6>
+            <h6>Apply Date & Time: <span style="font-weight: bold; color: #ed0505;">${request. currentTime}</span></h6>
+            <h6>Period From (Time-In): <span style="font-weight: bold; color: #ed0505;">${request.fromDate}</span></h6>
+            <h6>Period To (Time-Out): <span style="font-weight: bold; color: #ed0505;">${request.toDate}</span></h6>
+            <h6>Days: <span style="font-weight: bold; color: #ed0505;">${request.days}</span></h6>
+            <h6>Reason: <span style="font-weight: bold; color: #ed0505;">${request.reason}</span></h6>
+            <div class="card-buttons">
+              <button class="Accepted">Accept</button>
+              <button class="CallParents">Call Parents</button>
+              <button class="Rejected">Reject</button>
+            </div>
+          `;
+
+          container.appendChild(card);
+        });
+      } 
+
+    // Load pass requests when the page is ready
+    window.onload = fetchPassRequests;
+  </script>
+</body>
+</html>

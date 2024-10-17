@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease;
+            animation: fadeInBackground 1s ease-in-out;
+        }
+        .container {
+            width: 90%;
+            max-width: 500px;
+            margin: 10px auto;
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #333;
+            text-align: center;
+            animation: fadeInText 1s ease;
+        }
+        .card {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        .card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .card:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        .card h2 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #555;
+        }
+        .toggle-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .profile-info {
+            display: flex;
+            align-items: center;
+        }
+        .profile-photo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .profile-details {
+            display: flex;
+            flex-direction: column;
+        }
+        .profile-details .name {
+            font-size: 14px;
+            color: #333;
+        }
+        .profile-details .register-no {
+            font-size: 12px;
+            color: #888;
+        }
+        .toggle {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 22px;
+        }
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 34px;
+        }
+        .toggle .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.4s;
+        }
+        input:checked + .slider {
+            background-color: #4CAF50;
+        }
+        input:checked + .slider:before {
+            transform: translateX(18px);
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-top: 8px;
+            background-color: #fff;
+            appearance: none;
+        }
+        .reset-btn {
+            background-color: #f44;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.4s ease;
+            opacity: 0;
+            animation: slideUp 1.2s ease forwards;
+            animation-delay: 0.8s;
+        }
+        .reset-btn:hover {
+            background-color: #d33;
+            transform: scale(1.05);
+        }
+        .search-container {
+            margin-bottom: 15px;
+        }
+        .search-input {
+            width: 90%;
+            padding: 10px;
+            font-size: 14px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        /* Mobile Styles */
+        @media (max-width: 600px) {
+            body {
+                font-size: 16px;
+            }
+            h1 {
+                font-size: 20px;
+                margin-bottom: 10px;
+            }
+            .container {
+                padding: 10px;
+            }
+            .card {
+                padding: 12px;
+            }
+            .toggle-row label {
+                font-size: 14px;
+            }
+            .toggle {
+                width: 35px;
+                height: 20px;
+            }
+            .toggle .slider:before {
+                width: 14px;
+                height: 14px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInBackground {
+            0% { background-color: #e0e0e0; }
+            100% { background-color: #f7f7f7; }
+        }
+
+        @keyframes fadeInText {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            0% {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Settings</h1>
+        
+        <!-- Search Input -->
+        <div class="search-container">
+            <input type="text" class="search-input" id="searchInput" placeholder="Search by name or register number...">
+        </div>
+
+        <!-- New Card for ALL STUDENTS switch -->
+        <div class="card">
+            <h2>ALL STUDENTS</h2>
+            <div class="toggle-row">
+                <label for="allStudents">Enable for All Students</label>
+                <label class="toggle">
+                    <input type="checkbox" id="allStudents" value="off">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+    
+        <div id="students-container"></div>
+        
+    </div>
+
+    <script>
+        let State = false;
+        const students = []; // Store fetched student data for search filtering
+        const token = localStorage.getItem("token");
+    
+        function resetSettings() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const selects = document.querySelectorAll('select');
+    
+            // Reset checkboxes and select options
+            checkboxes.forEach((checkbox) => checkbox.checked = false);
+            selects.forEach((select) => select.selectedIndex = 0);
+        }
+    
+        function Resultfetch(filteredStudents, data) {
+            function get(regNo) {
+                let a = data.response.filter((item) => item.regNo == regNo && item.status == "on");
+                return a.length > 0;
+            }
+    
+            const container = document.getElementById('students-container');
+            container.innerHTML = ''; // Clear previous content
+    
+            filteredStudents.forEach(student => {
+                const studentCard = document.createElement('div');
+                studentCard.classList.add('card'); // Ensure styling
+                studentCard.innerHTML = `
+                    <h2>Student Profile</h2>
+                    <div class="toggle-row">
+                        <div class="profile-info">
+                            <img src="${student.photo}" alt="Profile Photo" class="profile-photo">
+                            <div class="profile-details">
+                                <label class="name">${student.name}</label>
+                                <label class="register-no">Register No: ${student.regNo}</label>
+                            </div>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" onclick="handleToggle('${student.regNo}', this.checked)" ${get(student.regNo) ? 'checked' : ''}>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                `;
+    
+                container.appendChild(studentCard);
+            });
+        }
+    
+        async function getEvery(students) {
+            try {
+                const response = await fetch('http://localhost:5000/rps', {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+                const data = await response.json();
+                Resultfetch(students, data);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    
+        async function Access(regNo, status) {
+            try {
+                const response = await fetch('http://localhost:5000/rAccess', {
+                    method: 'POST',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ regNo: regNo, status: status })
+                });
+                console.log('Access updated successfully');
+            } catch (error) {
+                console.error('Error updating access:', error);
+            }
+        }
+    
+        function handleToggle(regNo, isChecked) {
+            const status = isChecked ? 'on' : 'off';
+            Access(regNo, status);
+        }
+    
+        // Search Functionality
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredStudents = students.filter(student =>
+                student.name.toLowerCase().includes(searchTerm) ||
+                student.regNo.toLowerCase().includes(searchTerm)
+            );
+            getEvery(filteredStudents); // Pass filtered students to update display
+        });
+    
+        // Enable for All Students toggle
+        const allStudentsToggle = document.getElementById('allStudents');
+        allStudentsToggle.addEventListener('change', (event) => {
+            const isChecked = event.target.checked;
+            const studentCheckboxes = document.querySelectorAll('#students-container input[type="checkbox"]');
+    
+            // Update all checkboxes to match the "Enable for All Students" state
+            studentCheckboxes.forEach((checkbox) => {
+                checkbox.checked = isChecked;
+                const regNo = checkbox.getAttribute('onclick').match(/'([^']+)'/)[1]; // Extract regNo from the onclick attribute
+                handleToggle(regNo, isChecked); // Call handleToggle for each student
+            });
+        });
+    
+        // Example fetch to get the students
+        async function fetchStudents() {
+            try {
+                const response = await fetch('http://localhost:5000/students', {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    }
+                });
+                const data = await response.json();
+                students.push(...data); // Add fetched students to the array
+                getEvery(data); // Initial display of students
+            } catch (error) {
+                console.error('Error fetching students:', error);
+            }
+        }
+    
+        // Fetch students when the page loads
+        document.addEventListener('DOMContentLoaded', fetchStudents);
+    </script>
+    
+</body>
+</html>

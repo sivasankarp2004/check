@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message to Students</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f0f4c3, #b9fbc0);
+            margin: 0;
+            padding: 20px;
+            animation: backgroundAnimation 15s ease infinite;
+        }
+        @keyframes backgroundAnimation {
+            0% { background: #031c49; }
+            50% { background: #3f031e; }
+            100% { background: #033d36; }
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.6s ease;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        textarea {
+            width: 95%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            font-size: 16px;
+            outline: none;
+        }
+        textarea:focus {
+            border-color: #49ffdb;
+            box-shadow: 0 0 5px rgba(73, 255, 219, 0.5);
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            background-color: #49ffdb;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        button:hover {
+            background-color: #34e6b3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+        .message-list {
+            margin-top: 20px;
+        }
+
+        .message-item {
+            padding: 15px;
+            border: 1px solid #e2e2e2;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background: #f9f9f9;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: slideIn 0.5s forwards, scaleUp 0.3s forwards; /* Combined animations */
+            transition: background-color 0.3s ease;
+            word-wrap: break-word; 
+            white-space: pre-wrap;
+        }
+        .message-item:hover {
+            background-color: #e8f7f3;
+            transform: translateY(-2px) scale(1.02); /* Slight scaling on hover */
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes scaleUp {
+            from { transform: scale(0.95); }
+            to { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>INFORMATIONS</h1>
+    <form id="messageForm">
+        <div id="message" ></div>
+    </form>
+
+    <div class="message-list" id="messageList"></div>
+</div>
+
+<script>
+   const token = localStorage.getItem("token");
+   let messages=[]
+async function getMessage() {
+    try {
+        // Fetch the messages from the server
+        const response = await fetch('https://hostel-kasc.vercel.app/getmessage', {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+        });
+
+        // Parse the response (expecting an array of objects)
+        const data = await response.json();
+
+        // Check if data.response is an array
+        if (Array.isArray(data.response)) {
+            // Clear any previous messages
+            document.getElementById('message').value = ''; // Clear the textarea
+
+            // Loop through the array and display each message
+            messages.push(...data.response.map(item => item.message)); // Extract 'message' field from each object
+            displayMessages();
+        } else {
+            console.log("Unexpected response format.");
+        }
+    } catch (err) {
+        console.error("Error fetching messages:", err);
+    }
+}
+
+getMessage();
+
+// Function to display messages in the message list
+function displayMessages() {
+    const messageListDiv = document.getElementById('messageList');
+    messageListDiv.innerHTML = ''; // Clear existing messages
+
+    // Iterate through the messages array and create elements
+    messages.forEach((msg, index) => {
+        const messageItem = document.createElement('div');
+        messageItem.classList.add('message-item');
+        messageItem.textContent = `Message ${index + 1}: ${msg}`;
+        messageListDiv.appendChild(messageItem);
+    });
+}
+
+</script>
+
+</body>
+</html>

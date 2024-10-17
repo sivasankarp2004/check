@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pass Confirmation</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Quicksand:wght@500&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Quicksand', sans-serif;
+            background-color: #fff0f5;
+            display: flex;
+            justify-content: center;
+            height: 160vh;
+            background: linear-gradient(145deg, #ffebf0 0%, #fff0f5 100%);
+           
+        }
+
+        /* Particle background animation */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/dotnoise-light.png'), radial-gradient(circle at top, #ffc1cc 0%, #ffd1dc 40%, #fff0f5 100%);
+            animation: particleAnimation 15s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes particleAnimation {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-1000px); }
+        }
+
+        .confirmation-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+            border: 3px solid #ff6f91;
+            position: relative;
+            z-index: 10;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .confirmation-container:hover {
+            border-color: #ffc1cc;
+            box-shadow: 0 20px 50px rgba(255, 111, 145, 0.5);
+            transition: 0.5s ease;
+        }
+
+        .confirmation-container img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+
+        .confirmation-container h2 {
+            margin-bottom: 20px;
+            color: #08ab2e;
+            font-size: 30px;
+            font-weight: 600;
+            animation: neonGlow 1s infinite alternate;
+        }
+
+        .confirmation-container h4 {
+            margin-bottom: 20px;
+            color: #fff93d;
+            font-size: 20px;
+            font-weight: 500;
+            animation: neonGlow1 1s infinite alternate;
+        }
+
+        .confirmation-container p {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 10px;
+            animation: floatText 3s infinite;
+        }
+
+        .confirmation-container .details {
+            margin-top: 20px;
+            text-align: left;
+            background-color: #fff7f0;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: inset 0 3px 10px rgba(0, 0, 0, 0.05);
+            animation: slideUp 1.5s ease-in-out;
+        }
+
+        .details p {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.8;
+            transition: color 0.3s ease;
+            animation: colorShift 4s infinite alternate;
+        }
+
+        .details p:hover {
+            color: #ff6f91;
+            animation: rubberBand 0.8s ease;
+        }
+
+        .download-btn, .print-btn, .refresh-btn {
+            margin-top: 20px;
+            padding: 12px 25px;
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease-in-out;
+            position: relative;
+            z-index: 10;
+            animation: bounceBtn 2s infinite alternate;
+        }
+
+        .download-btn {
+            background: linear-gradient(45deg, #ff6f91, #ff9aa2);
+        }
+
+        .download-btn:hover {
+            background-position: right center;
+            box-shadow: 0 8px 20px rgba(255, 111, 145, 0.3);
+            transform: translateY(-3px) scale(1.1);
+            animation: glowBtn 1.5s infinite alternate;
+        }
+
+        .print-btn {
+            background: linear-gradient(45deg, #ffb6c1, #ffc1cc);
+        }
+
+        .print-btn:hover {
+            background-position: right center;
+            box-shadow: 0 8px 20px rgba(255, 182, 193, 0.3);
+            transform: translateY(-3px) scale(1.1);
+            animation: glowBtn 1.5s infinite alternate;
+        }
+
+        .refresh-btn {
+            background: linear-gradient(45deg, #ffa07a, #ff4500);
+        }
+
+        .refresh-btn:hover {
+            background-position: right center;
+            box-shadow: 0 8px 20px rgba(255, 165, 0, 0.3);
+            transform: translateY(-3px) scale(1.1);
+            animation: glowBtn 1.5s infinite alternate;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes floatText {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+
+        @keyframes slideUp {
+            0% { transform: translateY(50px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes neonGlow {
+            0% { text-shadow: 0 0 10px #0e795d, 0 0 20px #0e795d, 0 0 30px #0e795d, 0 0 40px #0e795d; }
+            100% { text-shadow: 0 0 20px #fafafa, 0 0 30px #fafafa, 0 0 40px #fafafa, 0 0 50px #fafafa; }
+        }
+
+        @keyframes glowBtn {
+            0% { box-shadow: 0 0 10px rgba(255, 111, 145, 0.5); }
+            100% { box-shadow: 0 0 20px rgba(255, 111, 145, 1); }
+        }
+
+        @keyframes bounceBtn {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-5px); }
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="confirmation-container">
+        <img src="https://via.placeholder.com/80" alt="Profile Picture">
+        <h2>Pass Accepted!</h2>
+       <center> <div id="qrCode"></div></center>
+       <p><span id="passNumber">2024W123456</span></p>
+      
+        <div class="details">
+            <p><strong style="color:red;">Pass Type:</strong> <button style="background-color: rgb(255, 255, 255); color: black; border: none; padding: 10px 2px; font-size: 18px; cursor: pointer;">White Pass</button>
+                        </p>
+
+            <p><strong style="color:red;">Student Name:</strong> <span style="color:green;">John Doe</span></p>
+<p><strong style="color:red;">Register Number:</strong> <span style="color:green;">123456</span></p>
+<p><strong style="color:red;">Approval Date:</strong> <span style="color:green;">2024-09-30</span></p>
+<p><strong style="color:red;">Out Time:</strong> <span style="color:green;">8:00 PM</span></p>
+<p><strong style="color:red;">In Time:</strong> <span style="color:green;">9:00 PM</span></p>
+<p><strong style="color:red;">Reason:</strong> <span style="color:green;">Going for Home</span></p>
+<p><strong style="color:red;">Approved By:</strong> <span style="color:green;">Warden Name</span></p>
+<p><strong style="color:red;">Pass Apply Date</strong> <span style="color:green;">08/10/204</span></p>
+
+
+        </div>
+        
+        <button class="download-btn" onclick="downloadPass()">Download Pass</button>
+        <button class="print-btn" onclick="printPass()">Print Pass</button>
+        <button class="refresh-btn" onclick="refreshPass()">Refresh Pass</button> <!-- New Refresh Button -->
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+
+    <script>
+        // Generate the QR code dynamically
+        function generateQRCode(passNumber) {
+            const qrCodeDiv = document.getElementById('qrCode');
+            qrCodeDiv.innerHTML = "";  // Clear previous QR code
+            new QRCode(qrCodeDiv, {
+                text: passNumber,
+                width: 150,
+                height: 150
+            });
+        }
+
+        // Function to generate a new random pass number
+        function generatePassNumber() {
+            const year = "PASS-NO:";
+            const randomNum = Math.floor(Math.random() * 900000 + 100000);  // 6-digit random number
+            return year + randomNum;
+        }
+
+        // Function to refresh pass number and QR code
+        function refreshPass() {
+            const newPassNumber = generatePassNumber();
+            document.getElementById('passNumber').textContent = newPassNumber;  // Update pass number on the page
+            generateQRCode(newPassNumber);  // Generate new QR code
+        }
+
+        // Initial QR code generation
+        generateQRCode("2024W123456");
+
+        // Function to download the pass as an image
+        function downloadPass() {
+            const confirmationContainer = document.querySelector('.confirmation-container');
+            html2canvas(confirmationContainer).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'pass-confirmation.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        }
+
+        // Function to print the pass
+        function printPass() {
+            const originalContent = document.body.innerHTML;
+            const printContent = document.querySelector('.confirmation-container').outerHTML;
+            document.body.innerHTML = printContent;
+            window.print();
+            document.body.innerHTML = originalContent;
+        }
+    </script>
+
+</body>
+</html>

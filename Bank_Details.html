@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Bank Details</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tbody tr:hover {
+            background-color: #e0f7fa;
+        }
+        .search-container {
+            margin-bottom: 20px;
+        }
+        .search-input {
+            padding: 10px;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            display: block;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .print-button, .download-button {
+            margin: 20px 10px 20px 0;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .print-button:hover, .download-button:hover {
+            background-color: #45a049;
+        }
+
+        /* Styling for 'N/A' in red color */
+        .no-data {
+            color: red;
+        }
+
+        /* Print-specific styling */
+        @media print {
+            .print-button, .download-button, .search-container {
+                display: none;
+            }
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            table {
+                page-break-inside: auto;
+            }
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+        }
+
+        /* Force print to A3 page size in portrait orientation */
+        @page {
+            size: A3 portrait; /* Change to portrait orientation */
+            margin: 3mm;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="details-container">
+        <h2><center>Student Bank Details</center></h2>
+        <div class="search-container">
+            <input type="text" id="search-input" class="search-input" placeholder="Search by Name, Register No, Course, or Year" onkeyup="filterTable()">
+        </div>
+        <button class="print-button" onclick="printTable()">Print</button>
+        <button class="download-button" onclick="downloadTableAsExcel()">Download Excel</button>
+        <table id="student-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Register No</th>
+                    <th>Course Year</th>
+                    <th>Course</th>
+                    <th>Phone Number</th>
+                    <th>Account No</th>
+                    <th>Account Holder</th>
+                    <th>IFSC</th>
+                    <th>Branch</th>
+                </tr>
+            </thead>
+            <tbody id="student-list"></tbody>
+        </table>
+    </div>
+
+    <script>
+        async function fetchStudentsBankDetails() {
+            try {
+                const response = await fetch('http://localhost:5000/students');
+                const students = await response.json();
+
+                if (!response.ok) {
+                    console.error('Error fetching student data');
+                    alert('Error fetching students!');
+                    return;
+                }
+
+                const studentList = document.getElementById('student-list');
+                studentList.innerHTML = ''; // Clear any existing content
+
+                students.forEach(student => {
+                    const studentRow = document.createElement('tr');
+
+                    // Check if phone number is missing and apply the "no-data" class for "N/A"
+                    const phoneNumber = student.studentPhone ? student.studentPhone : '<span class="no-data">N/A</span>';
+
+                    studentRow.innerHTML = `
+                        <td>${student.name || 'N/A'}</td>
+                        <td>${student.regNo || 'N/A'}</td>
+                        <td>${student.courseYear || 'N/A'}</td>
+                        <td>${student.course || 'N/A'}</td>
+                        <td>${phoneNumber}</td> <!-- Added Phone Number with condition -->
+                        <td>${student.accountNo || 'N/A'}</td>
+                        <td>${student.accountHolder || 'N/A'}</td>
+                        <td>${student.ifsc || 'N/A'}</td>
+                        <td>${student.branch || 'N/A'}</td>
+                    `;
+                    studentList.appendChild(studentRow);
+                });
+            } catch (error) {
+                console.error('Fetch error:', error);
+                alert('Error fetching data. Please try again later.');
+            }
+        }
+
+        function filterTable() {
+            const input = document.getElementById('search-input').value.toLowerCase();
+            const table = document.getElementById('student-table');
+            const rows = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < rows.length; i++) {
+                let row = rows[i];
+                const name = row.cells[0].innerText.toLowerCase();
+                const regNo = row.cells[1].innerText.toLowerCase();
+                const courseYear = row.cells[2].innerText.toLowerCase();
+                const course = row.cells[3].innerText.toLowerCase();
+                const phoneNumber = row.cells[4].innerText.toLowerCase();
+
+                if (name.includes(input) || regNo.includes(input) || courseYear.includes(input) || course.includes(input) || phoneNumber.includes(input)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            }
+        }
+
+        function printTable() {
+            window.print();
+        }
+
+        function downloadTableAsExcel() {
+            const table = document.getElementById('student-table');
+            let excelData = '';
+
+            // Loop through rows and cells to get the data
+            for (let i = 0; i < table.rows.length; i++) {
+                let row = table.rows[i];
+
+                // Only include visible rows (not hidden by the filter)
+                if (row.style.display !== "none") {
+                    let rowData = [];
+                    for (let j = 0; j < row.cells.length; j++) {
+                        rowData.push(row.cells[j].innerText);
+                    }
+                    excelData += rowData.join('\t') + '\n';
+                }
+            }
+
+            // Create a Blob from the Excel data and trigger a download
+            const blob = new Blob([excelData], { type: 'application/vnd.ms-excel' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'student_bank_details.xls';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        fetchStudentsBankDetails();
+    </script>
+
+</body>
+</html>

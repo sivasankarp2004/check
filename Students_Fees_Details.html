@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fees Submission Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .search-input {
+            padding: 10px;
+            font-size: 16px;
+            width: 80%;
+            max-width: 400px;
+        }
+
+        .print-button,
+        .download-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        table {
+            width: 100%;
+            max-width: 800px;
+            border-collapse: collapse;
+            margin: 20px auto; /* This will center the table */
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        th {
+            background-color: #28a745;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 22px;
+            }
+
+            th, td {
+                font-size: 14px;
+                padding: 8px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            table, table * {
+                visibility: visible;
+            }
+            table {
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+            /* Hide the Bill Upload column */
+            th:nth-child(5), td:nth-child(5) {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Fees Submission Results</h1>
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search by Name, Register No, Bill No, or Semester">
+        </div>
+        <button class="print-button" onclick="printPage()">Print Results</button>
+        <button class="download-button" onclick="downloadExcel()">Download Excel</button>
+        <div id="error" class="error" style="display: none;"></div>
+        <table id="resultsTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Register Number</th>
+                    <th>Semester</th>
+                    <th>Bill Number</th>
+                    <th>Bill Upload</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Results will be inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        let submissions = []; // Store fetched data
+        let filteredSubmissions = []; // Store currently filtered submissions
+
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('http://localhost:5000/get-fees-submissions')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    submissions = data; // Store the fetched data
+                    filteredSubmissions = data; // Initialize filtered submissions
+                    displayResults(submissions);
+                })
+                .catch(error => {
+                    console.error('Error fetching submissions:', error);
+                    const errorDiv = document.getElementById('error');
+                    errorDiv.innerText = 'An error occurred while fetching submissions.';
+                    errorDiv.style.display = 'block';
+                });
+
+            // Add event listener to search input
+            document.getElementById('searchInput').addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                filteredSubmissions = submissions.filter(submission => {
+                    return submission.name.toLowerCase().includes(searchTerm) ||
+                           submission.registerNumber.toLowerCase().includes(searchTerm) ||
+                           submission.billNumber.toLowerCase().includes(searchTerm) ||
+                           submission.semester.toLowerCase().includes(searchTerm);
+                });
+                displayResults(filteredSubmissions);
+            });
+        });
+
+        function displayResults(data) {
+            const resultsTableBody = document.querySelector('#resultsTable tbody');
+            resultsTableBody.innerHTML = ''; // Clear previous results
+
+            if (data.length === 0) {
+                const errorDiv = document.getElementById('error');
+                errorDiv.innerText = 'No submissions found.';
+                errorDiv.style.display = 'block';
+                return;
+            } else {
+                const errorDiv = document.getElementById('error');
+                errorDiv.style.display = 'none'; // Hide error if results exist
+            }
+
+            data.forEach(submission => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${submission.name}</td>
+                    <td>${submission.registerNumber}</td>
+                    <td>${submission.semester}</td>
+                    <td>${submission.billNumber}</td>
+                    <td>
+                        <a href="view-bill.html?bill=${encodeURIComponent(submission.billUpload)}" target="_blank">View Bill</a>
+                    </td>
+                `;
+                resultsTableBody.appendChild(row);
+            });
+        }
+
+        function printPage() {
+            window.print();
+        }
+
+        function downloadExcel() {
+            // Use the currently filtered submissions for the download
+            const data = filteredSubmissions.map(submission => ({
+                Name: submission.name,
+                'Register Number': submission.registerNumber,
+                Semester: submission.semester,
+                'Bill Number': submission.billNumber,
+                'Bill Upload': submission.billUpload
+            }));
+
+            const worksheet = XLSX.utils.json_to_sheet(data);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Submissions');
+
+            // Create a download link and trigger the download
+            XLSX.writeFile(workbook, 'fees_submissions.xlsx');
+        }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+</body>
+</html>

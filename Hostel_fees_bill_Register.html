@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hostel Fees Submission</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 320px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"], input[type="file"], select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .message {
+            margin-top: 20px;
+            font-weight: bold;
+            color: green;
+            display: none;
+        }
+
+        .error {
+            margin-top: 20px;
+            font-weight: bold;
+            color: red;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Hostel Fees Submission</h1>
+
+        <form id="feesForm">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" placeholder="Enter your name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="registerNumber">Register Number:</label>
+                <input type="text" id="registerNumber" placeholder="Enter your register number" required>
+            </div>
+
+            <div class="form-group">
+                <label for="courseYear">Course Year:</label>
+                <select id="courseYear" required>
+                    <option value="" disabled selected>Select your course year</option>
+                    <option value="1st">1st Year</option>
+                    <option value="2nd">2nd Year</option>
+                    <option value="3rd">3rd Year</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="semester">Semester:</label>
+                <select id="semester" required>
+                    <option value="" disabled selected>Select your semester</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="billNumber">Enter Bill Number:</label>
+                <input type="text" id="billNumber" placeholder="Enter your bill number" required>
+            </div>
+
+            <div class="form-group">
+                <label for="billUpload">Upload Bill:</label>
+                <input type="file" id="billUpload" required>
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+
+        <div id="message" class="message">Fees submitted successfully!</div>
+        <div id="error" class="error">An error occurred. Please try again.</div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const MAX_FILE_SIZE = 150 * 1024; // 150 KB in bytes
+
+            // Course year to semester mapping
+            const semesterOptions = {
+                '1st': ['1st Semester', '2nd Semester'],
+                '2nd': ['3rd Semester', '4th Semester'],
+                '3rd': ['5th Semester', '6th Semester']
+            };
+
+            document.getElementById('billUpload').addEventListener('change', function(event) {
+                const file = event.target.files[0];
+
+                if (file) {
+                    // Check file size
+                    if (file.size > MAX_FILE_SIZE) {
+                        alert('The file size exceeds 150 KB. Please upload a smaller file.');
+                        event.target.value = ''; // Clear the file input
+                        return;
+                    }
+                }
+            });
+
+            document.getElementById('courseYear').addEventListener('change', function() {
+                const selectedYear = this.value;
+                const semesterSelect = document.getElementById('semester');
+
+                // Clear current options
+                semesterSelect.innerHTML = '<option value="" disabled selected>Select your semester</option>';
+
+                // Add new options based on selected course year
+                if (semesterOptions[selectedYear]) {
+                    semesterOptions[selectedYear].forEach(semester => {
+                        const option = document.createElement('option');
+                        option.value = semester;
+                        option.textContent = semester;
+                        semesterSelect.appendChild(option);
+                    });
+                }
+            });
+
+            document.getElementById('feesForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const name = document.getElementById('name').value;
+                const registerNumber = document.getElementById('registerNumber').value;
+                const semesterSelect = document.getElementById('semester');
+                const semester = semesterSelect.value;
+                const billNumber = document.getElementById('billNumber').value;
+                const billFile = document.getElementById('billUpload').files[0];
+
+                if (name && registerNumber && semester && billNumber && billFile) {
+                    // Prepare form data
+                    const formData = new FormData();
+                    formData.append('name', name);
+                    formData.append('registerNumber', registerNumber);
+                    formData.append('semester', semester);
+                    formData.append('billNumber', billNumber);
+                    formData.append('billUpload', billFile);
+
+                    // Submit the form data using fetch API
+                    fetch('http://localhost:5000/submit-fees', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message === 'Fees submitted successfully') {
+                            document.getElementById('message').style.display = 'block';
+                            document.getElementById('error').style.display = 'none';
+
+                            // Remove the selected semester option
+                            semesterSelect.querySelector(`option[value="${semester}"]`).remove();
+
+                            // Clear the other fields after submission
+                            document.getElementById('name').value = '';
+                            document.getElementById('registerNumber').value = '';
+                            document.getElementById('billNumber').value = '';
+                            document.getElementById('billUpload').value = '';
+                        } else {
+                            throw new Error('Submission failed');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        document.getElementById('error').style.display = 'block';
+                        document.getElementById('message').style.display = 'none';
+                    });
+                } else {
+                    alert("Please fill out all fields completely.");
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
