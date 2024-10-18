@@ -922,7 +922,7 @@ async function Limit(){
 
 
 cron.schedule('* * * * * *', () => { // Cron pattern for every second
-    callApi();
+
     Limit()
 });
 
